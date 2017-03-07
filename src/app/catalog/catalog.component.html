@@ -1,0 +1,17 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>Categories</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <md-list>
+      <md-list-item *ngFor="let category of getCategories()">
+        <h3 md-line> {{category.name}} </h3>
+        <!--<p md-line>
+          <span> {{message.subject}} </span>
+          <span class="demo-2"> &#45;&#45; {{message.content}} </span>
+        </p>-->
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
+
