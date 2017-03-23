@@ -9,6 +9,8 @@ import {AngularFireModule} from "angularfire2";
 import { HeaderComponent } from './header/header.component';
 import { CatalogComponent } from './catalog/catalog.component';
 
+import 'hammerjs';
+
 export const firebaseConfig = {
   apiKey: "AIzaSyACjFU8ux-Df1De0gAgBeIDxXMEvafAiQc",
   authDomain: "glaring-torch-2436.firebaseapp.com",
@@ -28,7 +30,7 @@ export const firebaseConfig = {
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

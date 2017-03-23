@@ -4,6 +4,8 @@ import {Catalog} from "./model/catalog";
 import {Category} from "./model/category";
 import {Item} from "./model/item";
 
+import * as _ from "lodash";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,41 +27,19 @@ export class AppComponent {
 
   private buildCatalog(snapshot) {
     const categories = new Map<string, Category>();
-    //console.log(snapshot);
-    for (let categoryId in snapshot.categories) {
-      const category: Category = {
-        id: categoryId,
-        name: snapshot.categories[categoryId].name,
-        icon: snapshot.categories[categoryId].icon
-      };
-      categories.set(category.id, category);
-    }
+    _.forEach(snapshot.categories, (snapshotCategory, id) => {
+      categories.set(id, _.merge({ id: id }, snapshotCategory));
+    });
 
-    const items: Item[] = [];
-    for (let itemId in snapshot.items) {
-      const itemRaw = snapshot.items[itemId];
-      const item: Item = {
-        id: itemId,
-        categoryId: itemRaw.category,
-        name: itemRaw.name,
-        value: itemRaw.value,
-        commercialSource: itemRaw.commercialSource,
-        probableSource: itemRaw.probableSource
-      };
-      if (itemRaw.hasOwnProperty("description")) {
-        item.description = [];
-        itemRaw.description.forEach(line => item.description.push(line));
-      }
-      items.push(item);
-    }
+    const items: Item[] = _.map(snapshot.items, (snapshotItem, id) => {
+      return _.merge({ id }, snapshotItem);
+    });
 
     this.catalog = {
       categories: categories,
       items: items
     };
 
-    console.log('Catalog loaded');
     this.catalogLoaded = true;
-    //console.log(this.catalog);
   }
 }

@@ -1,15 +1,10 @@
 <md-card>
-  <md-card-header>
-    <md-card-title>Categories</md-card-title>
-  </md-card-header>
+  <md-card-title>Categories</md-card-title>
   <md-card-content>
     <md-list>
       <md-list-item *ngFor="let category of getCategories()">
-        <h3 md-line> {{category.name}} </h3>
-        <!--<p md-line>
-          <span> {{message.subject}} </span>
-          <span class="demo-2"> &#45;&#45; {{message.content}} </span>
-        </p>-->
+        <md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon>
+        <button md-button>{{category.name}}</button>
       </md-list-item>
     </md-list>
   </md-card-content>

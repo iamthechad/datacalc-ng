@@ -1,10 +1,11 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Catalog} from "../model/catalog";
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.scss']
+  styleUrls: ['./catalog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogComponent implements OnInit {
 
@@ -18,7 +19,7 @@ export class CatalogComponent implements OnInit {
   }
 
   getCategories() {
-    console.trace('getCategories');
+    console.log('getCategories');
     return this.catalog.categories.values();
   }
 
