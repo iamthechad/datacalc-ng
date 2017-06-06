@@ -1,23 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { MaterialModule } from '@angular/material';
+import {MdButtonModule, MdCardModule, MdIconModule, MdListModule, MdToolbarModule} from "@angular/material";
+import { AngularFireModule } from "angularfire2";
+import {AngularFireDatabaseModule} from "angularfire2/database";
 
 import { AppComponent } from './app.component';
-import {AngularFireModule} from "angularfire2";
 import { HeaderComponent } from './header/header.component';
 import { CatalogComponent } from './catalog/catalog.component';
 
-import 'hammerjs';
+import { environment } from '../environments/environment';
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyACjFU8ux-Df1De0gAgBeIDxXMEvafAiQc",
-  authDomain: "glaring-torch-2436.firebaseapp.com",
-  databaseURL: "https://glaring-torch-2436.firebaseio.com",
-  storageBucket: "glaring-torch-2436.appspot.com",
-  messagingSenderId: "844761162138"
-};
+import 'hammerjs';
 
 @NgModule({
   declarations: [
@@ -27,10 +23,16 @@ export const firebaseConfig = {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    MaterialModule
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    MdToolbarModule,
+    MdCardModule,
+    MdIconModule,
+    MdButtonModule,
+    MdListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

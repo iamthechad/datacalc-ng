@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AngularFire, FirebaseObjectObservable} from "angularfire2";
+import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2/database";
 import {Catalog} from "./model/catalog";
 import {Category} from "./model/category";
 import {Item} from "./model/item";
@@ -20,8 +20,8 @@ export class AppComponent {
 
   catalogLoaded = false;
 
-  constructor(af: AngularFire) {
-    this.item = af.database.object('/catalog');
+  constructor(ad: AngularFireDatabase) {
+    this.item = ad.object('/catalog');
     this.item.subscribe(snapshot => this.buildCatalog(snapshot));
   }
 
@@ -31,7 +31,7 @@ export class AppComponent {
       categories.set(id, _.merge({ id: id }, snapshotCategory));
     });
 
-    const items: Item[] = _.map(snapshot.items, (snapshotItem, id) => {
+    const items: Item[] = _.map(snapshot.items, (snapshotItem: Item, id) => {
       return _.merge({ id }, snapshotItem);
     });
 
