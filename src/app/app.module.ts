@@ -15,13 +15,17 @@ import { environment } from '../environments/environment';
 
 import 'hammerjs';
 import { ItemsComponent } from './items/items.component';
+import { OrderComponent } from './order/order.component';
+import { PricePipe } from './price.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     CatalogComponent,
-    ItemsComponent
+    ItemsComponent,
+    OrderComponent,
+    PricePipe
   ],
   imports: [
     BrowserModule,

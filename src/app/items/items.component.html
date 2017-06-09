@@ -1,3 +1,24 @@
-<p>
-  items works!
-</p>
+<md-card *ngFor="let item of items">
+  <md-card-title>{{ item.name }}</md-card-title>
+  <md-card-subtitle>{{ item.value | price }}</md-card-subtitle>
+  <md-card-content>
+    <md-list>
+      <md-list-item *ngIf="item.description || item.note">
+        <span md-line *ngIf="item.description">{{ item.description.join(', ') }}</span>
+        <span md-line *ngIf="item.note">{{ item.note }}</span>
+      </md-list-item>
+      <md-divider *ngIf="item.description || item.note"></md-divider>
+      <md-list-item>
+        <span md-line>Commercial Source</span>
+        <span md-line><a href="{{item.commercialSource}}">{{ item.commercialSource }}</a></span>
+      </md-list-item>
+      <md-list-item>
+        <span md-line>Probable Source</span>
+        <span md-line>{{ item.probableSource }}</span>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+  <md-card-actions *ngIf="">
+    <button md-button (click)="addItemToOrder(item.id)">Select</button>
+  </md-card-actions>
+</md-card>

@@ -1,9 +1,9 @@
-<md-card>
+<md-card class="catalog-container">
   <md-card-title>Categories</md-card-title>
   <md-card-content>
     <md-list>
-      <md-list-item *ngFor="let category of getCategories()">
-        <button md-button (click)="categorySelected(category.id)"><md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon> {{category.name}}</button>
+      <md-list-item *ngFor="let category of catalog.getCategories()">
+        <button md-button (click)="categorySelected(category.id)" class="catalog-entry"><md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon> {{category.name}}</button>
       </md-list-item>
     </md-list>
   </md-card-content>

@@ -6,4 +6,5 @@ export interface Item {
   probableSource?: string;
   commercialSource: string;
   description?: string[];
+  note?: string;
 }

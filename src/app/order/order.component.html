@@ -1,0 +1,19 @@
+<md-card class="order-container">
+  <md-card-title>Your Data Value</md-card-title>
+  <md-card-content>
+    <md-list *ngFor="let orderCategory of getOrderCategories()">
+      <md-list-item>{{ orderCategory.name }}</md-list-item>
+      <md-list-item *ngFor="let item of getOrderCategoryItems(orderCategory.id)">
+        <span md-line>{{ item.name }}</span><button md-button>X</button>
+        <span md-line>{{ item.value | price }}</span>
+      </md-list-item>
+    </md-list>
+    <md-divider></md-divider>
+    <md-list>
+      <md-list-item>
+        <span md-line>Total</span>
+        <span md-line>{{ getOrderTotal() | price }}</span>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>

@@ -7,25 +7,15 @@ import {Catalog} from "../model/catalog";
   styleUrls: ['./catalog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogComponent implements OnInit {
+export class CatalogComponent {
 
   @Input()
   catalog: Catalog;
 
   @Output() onCategorySelected = new EventEmitter<string>();
 
-  constructor() { }
-
-  ngOnInit() {
-    console.log('catalog?', this.catalog);
-  }
-
-  getCategories() {
-    console.log('getCategories');
-    return this.catalog.categories.values();
-  }
-
   categorySelected(categoryId) {
+    console.log('Category selected', categoryId);
     this.onCategorySelected.emit(categoryId);
   }
 

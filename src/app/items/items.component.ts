@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Item} from "../model/item";
 
 @Component({
@@ -6,12 +6,12 @@ import {Item} from "../model/item";
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.scss']
 })
-export class ItemsComponent implements OnInit {
+export class ItemsComponent {
   @Input() items: Item[];
 
-  constructor() { }
+  @Output() itemSelected = new EventEmitter<string>();
 
-  ngOnInit() {
+  addItemToOrder(itemId) {
+    this.itemSelected.emit(itemId);
   }
-
 }
