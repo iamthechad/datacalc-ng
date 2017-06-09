@@ -3,8 +3,7 @@
   <md-card-content>
     <md-list>
       <md-list-item *ngFor="let category of getCategories()">
-        <md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon>
-        <button md-button>{{category.name}}</button>
+        <button md-button (click)="categorySelected(category.id)"><md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon> {{category.name}}</button>
       </md-list-item>
     </md-list>
   </md-card-content>

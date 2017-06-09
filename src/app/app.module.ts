@@ -14,12 +14,14 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { environment } from '../environments/environment';
 
 import 'hammerjs';
+import { ItemsComponent } from './items/items.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    CatalogComponent
+    CatalogComponent,
+    ItemsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2/database";
 import {Catalog} from "./model/catalog";
 import {Category} from "./model/category";
@@ -20,9 +20,24 @@ export class AppComponent {
 
   catalogLoaded = false;
 
+  private currentCategory: string;
+
   constructor(ad: AngularFireDatabase) {
     this.item = ad.object('/catalog');
     this.item.subscribe(snapshot => this.buildCatalog(snapshot));
+  }
+
+  categorySelected(categoryId: string) {
+    this.currentCategory = categoryId;
+  }
+
+  getItemsForCurrentCategory(): Item[] {
+    if (this.currentCategory && this.catalogLoaded) {
+      const list = _.filter(this.catalog.items, item => item.category === this.currentCategory);
+      console.log(list);
+      return list;
+    }
+    return [];
   }
 
   private buildCatalog(snapshot) {

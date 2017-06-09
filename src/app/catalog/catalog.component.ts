@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@angular/core';
 import {Catalog} from "../model/catalog";
 
 @Component({
@@ -12,6 +12,8 @@ export class CatalogComponent implements OnInit {
   @Input()
   catalog: Catalog;
 
+  @Output() onCategorySelected = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
@@ -21,6 +23,10 @@ export class CatalogComponent implements OnInit {
   getCategories() {
     console.log('getCategories');
     return this.catalog.categories.values();
+  }
+
+  categorySelected(categoryId) {
+    this.onCategorySelected.emit(categoryId);
   }
 
 }

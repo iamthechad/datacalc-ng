@@ -1,6 +1,7 @@
 <app-header [title]=title></app-header>
 <div class="data-calc" *ngIf=catalogLoaded>
-  <app-catalog [catalog]=catalog></app-catalog>
+  <app-catalog [catalog]=catalog (onCategorySelected)="categorySelected($event)"></app-catalog>
+  <app-items [items]="getItemsForCurrentCategory()"></app-items>
 </div>
 <div *ngIf=!catalogLoaded>
   Loading...

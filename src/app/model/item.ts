@@ -1,6 +1,6 @@
 export interface Item {
   id: string;
-  categoryId: string;
+  category: string;
   name: string;
   value: number;
   probableSource?: string;
