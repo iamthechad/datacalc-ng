@@ -6,6 +6,7 @@ import {Item} from "./model/item";
 
 import * as _ from "lodash";
 import {Order} from "./model/order";
+import {SelectableItem} from "./model/selectable-item";
 
 @Component({
   selector: 'app-root',
@@ -37,9 +38,15 @@ export class AppComponent {
     this.order.selection[this.currentCategory].push(itemId);
   }
 
-  getItemsForCurrentCategory(): Item[] {
+  itemRemoved(info: { categoryId: string, itemId: string }) {
+    _.remove(this.order.selection[info.categoryId], itemId => itemId === info.itemId);
+  }
+
+  getItemsForCurrentCategory(): SelectableItem[] {
     if (this.currentCategory && this.catalogLoaded) {
-      return this.catalog.getItemsForCategory(this.currentCategory);
+      const categoryItems = this.catalog.getItemsForCategory(this.currentCategory);
+      const orderItems = this.order.selection[this.currentCategory];
+      return _.map(categoryItems, item => _.assign({}, item, { selected: orderItems.indexOf(item.id) !== -1 }));
     }
     return [];
   }

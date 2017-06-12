@@ -4,7 +4,7 @@
     <md-list *ngFor="let orderCategory of getOrderCategories()">
       <md-list-item>{{ orderCategory.name }}</md-list-item>
       <md-list-item *ngFor="let item of getOrderCategoryItems(orderCategory.id)">
-        <span md-line>{{ item.name }}</span><button md-button>X</button>
+        <span md-line>{{ item.name }}</span><button md-button (click)="removeItemFromOrder(orderCategory.id, item.id)"><md-icon md-list-icon fontSet="icomoon" fontIcon="icon-cancel-circle"></md-icon></button>
         <span md-line>{{ item.value | price }}</span>
       </md-list-item>
     </md-list>

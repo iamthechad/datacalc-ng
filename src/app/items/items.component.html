@@ -18,7 +18,7 @@
       </md-list-item>
     </md-list>
   </md-card-content>
-  <md-card-actions *ngIf="">
+  <md-card-actions *ngIf="!item.selected">
     <button md-button (click)="addItemToOrder(item.id)">Select</button>
   </md-card-actions>
 </md-card>

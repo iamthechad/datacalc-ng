@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Catalog} from "../model/catalog";
 import {Order} from "../model/order";
 import {Category} from "../model/category";
@@ -16,9 +16,15 @@ export class OrderComponent implements OnInit {
 
   @Input() order: Order;
 
+  @Output() itemRemoved = new EventEmitter<{ categoryId: string, itemId: string }>();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  removeItemFromOrder(categoryId: string, itemId: string) {
+    this.itemRemoved.emit({ categoryId, itemId });
   }
 
   getOrderCategories(): Category[] {

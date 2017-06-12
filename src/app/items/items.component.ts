@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Item} from "../model/item";
+import {SelectableItem} from "../model/selectable-item";
 
 @Component({
   selector: 'app-items',
@@ -7,7 +7,7 @@ import {Item} from "../model/item";
   styleUrls: ['./items.component.scss']
 })
 export class ItemsComponent {
-  @Input() items: Item[];
+  @Input() items: SelectableItem[];
 
   @Output() itemSelected = new EventEmitter<string>();
 
