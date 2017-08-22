@@ -1,22 +1,24 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import {MdButtonModule, MdCardModule, MdIconModule, MdListModule, MdToolbarModule} from "@angular/material";
-import { AngularFireModule } from "angularfire2";
-import {AngularFireDatabaseModule} from "angularfire2/database";
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {MdButtonModule, MdCardModule, MdIconModule, MdListModule, MdToolbarModule} from '@angular/material';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireDatabaseModule} from 'angularfire2/database';
 
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { CatalogComponent } from './catalog/catalog.component';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from './header/header.component';
+import {CatalogComponent} from './catalog/catalog.component';
 
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
 
 import 'hammerjs';
-import { ItemsComponent } from './items/items.component';
-import { OrderComponent } from './order/order.component';
-import { PricePipe } from './price.pipe';
+import {ItemsComponent} from './items/items.component';
+import {OrderComponent} from './order/order.component';
+import {PricePipe} from './price.pipe';
+import {CatalogService} from './service/catalog-service';
+import {OrderService} from './service/order-service';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { PricePipe } from './price.pipe';
     MdButtonModule,
     MdListModule
   ],
-  providers: [],
+  providers: [CatalogService, OrderService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

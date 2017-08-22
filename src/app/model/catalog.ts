@@ -1,9 +1,10 @@
-import {Category} from "./category";
+import {Category} from './category';
 import * as _ from 'lodash';
-import {Item} from "./item";
+import {Item} from './item';
 
 export class Catalog {
-  constructor(private categories: { [key: string]: Category }) {}
+  constructor(private categories: { [key: string]: Category }) {
+  }
 
   getCategories(): Category[] {
     return _.sortBy(_.values(this.categories), ['id']);

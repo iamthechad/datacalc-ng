@@ -1,41 +1,37 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Catalog} from "../model/catalog";
-import {Order} from "../model/order";
-import {Category} from "../model/category";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Order} from '../model/order';
+import {Category} from '../model/category';
 
 import * as _ from 'lodash';
-import {Item} from "../model/item";
+import {Item} from '../model/item';
+import {Catalog} from '../model/catalog';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss']
+  styleUrls: ['./order.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent {
   @Input() catalog: Catalog;
 
   @Input() order: Order;
 
   @Output() itemRemoved = new EventEmitter<{ categoryId: string, itemId: string }>();
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
   removeItemFromOrder(categoryId: string, itemId: string) {
     this.itemRemoved.emit({ categoryId, itemId });
   }
 
   getOrderCategories(): Category[] {
-    const withItems = _.keys(_.omitBy(this.order.selection, _.isEmpty)).sort();
+    const withItems = this.order.getCategoriesWithItems();
     return _.map(withItems, id => {
       return this.catalog.getCategory(id);
     });
   }
 
   getOrderCategoryItems(categoryId: string): Item[] {
-    const orderCategoryItemIds = this.order.selection[categoryId];
+    const orderCategoryItemIds = this.order.getItemIdsForCategory(categoryId);
     const categoryItems = this.catalog.getCategory(categoryId).items;
 
     return <Item[]>_.sortBy(

@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@angular/core';
-import {Catalog} from "../model/catalog";
+import {Component, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@angular/core';
+import {Catalog} from '../model/catalog';
 
 @Component({
   selector: 'app-catalog',
@@ -9,14 +9,12 @@ import {Catalog} from "../model/catalog";
 })
 export class CatalogComponent {
 
-  @Input()
-  catalog: Catalog;
+  @Input() catalog: Catalog;
 
-  @Output() onCategorySelected = new EventEmitter<string>();
+  @Output() categorySelected = new EventEmitter<string>();
 
-  categorySelected(categoryId) {
-    console.log('Category selected', categoryId);
-    this.onCategorySelected.emit(categoryId);
+  onCategorySelected(categoryId) {
+    this.categorySelected.emit(categoryId);
   }
 
 }

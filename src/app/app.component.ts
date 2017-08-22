@@ -1,12 +1,9 @@
 import {Component} from '@angular/core';
-import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2/database";
-import {Catalog} from "./model/catalog";
-import {Category} from "./model/category";
-import {Item} from "./model/item";
+import {CatalogService} from './service/catalog-service';
 
-import * as _ from "lodash";
-import {Order} from "./model/order";
-import {SelectableItem} from "./model/selectable-item";
+import {Order} from './model/order';
+import {Catalog} from './model/catalog';
+import {OrderService} from './service/order-service';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +11,7 @@ import {SelectableItem} from "./model/selectable-item";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = "Data Calculator";
-
-  item: FirebaseObjectObservable<any[]>;
+  title = 'Data Calculator';
 
   catalog: Catalog;
   order: Order;
@@ -25,50 +20,29 @@ export class AppComponent {
 
   private currentCategory: string;
 
-  constructor(ad: AngularFireDatabase) {
-    this.item = ad.object('/catalog');
-    this.item.subscribe(snapshot => this.buildCatalog(snapshot));
+  constructor(private catalogService: CatalogService,
+              private orderService: OrderService) {
+    this.catalogService.getCatalogObservable().subscribe((catalog: Catalog) => {
+      this.catalog = catalog;
+      this.currentCategory = this.catalog.getCategoryIds()[0];
+      this.catalogLoaded = true;
+    });
+    this.orderService.getOrderObservable().subscribe((order: Order) => this.order = order);
   }
 
-  categorySelected(categoryId: string) {
+  categorySelected(categoryId: string): void {
     this.currentCategory = categoryId;
   }
 
-  itemSelected(itemId: string) {
-    this.order.selection[this.currentCategory].push(itemId);
+  itemSelected(itemId: string): void {
+    this.order.addItem(this.currentCategory, itemId);
   }
 
-  itemRemoved(info: { categoryId: string, itemId: string }) {
-    _.remove(this.order.selection[info.categoryId], itemId => itemId === info.itemId);
+  itemRemoved(info: { categoryId: string, itemId: string }): void {
+    this.order.removeItem(info.categoryId, info.itemId);
   }
 
-  getItemsForCurrentCategory(): SelectableItem[] {
-    if (this.currentCategory && this.catalogLoaded) {
-      const categoryItems = this.catalog.getItemsForCategory(this.currentCategory);
-      const orderItems = this.order.selection[this.currentCategory];
-      return _.map(categoryItems, item => _.assign({}, item, { selected: orderItems.indexOf(item.id) !== -1 }));
-    }
-    return [];
-  }
+  getItemsForCurrentCategory = () => this.catalog.getItemsForCategory(this.currentCategory);
 
-  private buildCatalog(snapshot) {
-    const categoryMap: { [key: string]: Category } = {};
-    _.forEach(snapshot.categories, (snapshotCategory: Category, id) => {
-      categoryMap[id] = _.merge({ items: {}, id }, snapshotCategory);
-    });
-
-    _.forEach(snapshot.items, (snapshotItem: Item, id) => {
-      categoryMap[snapshotItem.category].items[id] = _.merge({id}, snapshotItem);
-    });
-
-    this.catalog = new Catalog(categoryMap);
-    const categoryIds = this.catalog.getCategoryIds();
-
-    this.order = {
-      selection: <{ [key: string]: string[] }>_.assign({}, ..._.map(categoryIds, id => ({ [id]: [] })))
-    };
-
-    this.catalogLoaded = true;
-    this.currentCategory = this.catalog.getCategoryIds()[0];
-  }
+  getOrderItemsForCurrentCategory = () => this.order.getItemsForCategory(this.currentCategory);
 }

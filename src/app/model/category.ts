@@ -1,4 +1,5 @@
-import {Item} from "./item";
+import {Item} from './item';
+
 export interface Category {
   id: string;
   name: string;

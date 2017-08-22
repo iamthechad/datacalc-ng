@@ -12,13 +12,13 @@
         <span md-line>Commercial Source</span>
         <span md-line><a href="{{item.commercialSource}}">{{ item.commercialSource }}</a></span>
       </md-list-item>
-      <md-list-item>
+      <md-list-item *ngIf="item.probableSource">
         <span md-line>Probable Source</span>
         <span md-line>{{ item.probableSource }}</span>
       </md-list-item>
     </md-list>
   </md-card-content>
-  <md-card-actions *ngIf="!item.selected">
-    <button md-button (click)="addItemToOrder(item.id)">Select</button>
+  <md-card-actions *ngIf="!isItemSelected(item)">
+    <button md-button (click)="onItemSelected(item.id)">Select</button>
   </md-card-actions>
 </md-card>

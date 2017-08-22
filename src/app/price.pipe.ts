@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {Util} from "./common/Util";
+import {Util} from './common/Util';
 
 @Pipe({
   name: 'price'
