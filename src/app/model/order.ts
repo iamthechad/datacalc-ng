@@ -1,15 +1,18 @@
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
+import {fromJS, Map} from 'immutable';
 
 export class Order {
-  private selection: { [key: string]: string[] } = {};
+  private selection: Map<string, string[]>;
 
   private orderModifyObservable: ReplaySubject<Order> = new ReplaySubject();
 
   constructor(selection?: { [key: string]: string[] }) {
     if (selection) {
-      this.selection = selection;
+      this.selection = fromJS(selection);
+    } else {
+      this.selection = Map();
     }
   }
 
@@ -21,9 +24,7 @@ export class Order {
     const itemIds = _.get(this.selection, categoryId, []);
     itemIds.push(itemId);
 
-    if (!_.has(this.selection, categoryId)) {
-      this.selection[categoryId] = itemIds;
-    }
+    this.selection = this.selection.set(categoryId, itemIds);
     this.orderModifyObservable.next(this);
   }
 
@@ -37,7 +38,7 @@ export class Order {
   }
 
   getCategoriesWithItems(): string[] {
-    return _.keys(this.getNonEmpty()).sort();
+    return this.selection.keySeq().toArray();
   }
 
   getItemIdsForCategory(categoryId: string): string[] {

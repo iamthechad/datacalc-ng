@@ -8,11 +8,11 @@ export class OrderService {
   private orderObservable: ReplaySubject<Order> = new ReplaySubject();
 
   private static storeOrder(order: Order) {
-    if (order.isEmpty()) {
+    /*if (order.isEmpty()) {
       localStorage.removeItem('order');
     } else {
       localStorage.setItem('order', JSON.stringify(order.getFullOrder()));
-    }
+    }*/
   }
 
   constructor() {
@@ -23,7 +23,10 @@ export class OrderService {
     } else {
       order = new Order();
     }
-    order.getOrderModifiedObservable().subscribe((modifiedOrder: Order) => OrderService.storeOrder(modifiedOrder));
+    order.getOrderModifiedObservable().subscribe((modifiedOrder: Order) => {
+      OrderService.storeOrder(modifiedOrder);
+      this.orderObservable.next(modifiedOrder);
+    });
     this.orderObservable.next(order);
   }
 
