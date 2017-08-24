@@ -13,6 +13,9 @@ import {OrderService} from './service/order-service';
 export class AppComponent {
   title = 'Data Calculator';
 
+  // I'd rather put this in a config file, but it's not really an issue for now
+  projectLink = 'https://github.com/iamthechad/datacalc-ng';
+
   catalog: Catalog;
   order: Order;
 

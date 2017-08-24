@@ -1,4 +1,4 @@
-<app-header [title]=title></app-header>
+<app-header [title]=title [projectLink]=projectLink></app-header>
 <div class="data-calc" *ngIf=catalogLoaded>
   <app-catalog [catalog]=catalog (categorySelected)="categorySelected($event)"></app-catalog>
   <app-items [items]="getItemsForCurrentCategory()" [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></app-items>
