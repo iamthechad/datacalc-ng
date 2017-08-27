@@ -6,7 +6,7 @@ import {Catalog} from './model/catalog';
 import {OrderService} from './service/order-service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'mt-app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

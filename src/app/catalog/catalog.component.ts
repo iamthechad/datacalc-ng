@@ -2,7 +2,7 @@ import {Component, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@
 import {Catalog} from '../model/catalog';
 
 @Component({
-  selector: 'app-catalog',
+  selector: 'mt-catalog',
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
