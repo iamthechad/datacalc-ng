@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Order} from '../model/order';
 import {Category} from '../model/category';
 
 import * as _ from 'lodash';
 import {Item} from '../model/item';
 import {Catalog} from '../model/catalog';
+import {List, Map} from 'immutable';
 
 @Component({
   selector: 'app-order',
@@ -12,42 +12,28 @@ import {Catalog} from '../model/catalog';
   styleUrls: ['./order.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrderComponent implements OnChanges {
+export class OrderComponent {
   @Input() catalog: Catalog;
 
-  @Input() order: Order;
+  @Input() order: Map<string, List<string>>;
 
   @Output() itemRemoved = new EventEmitter<{ categoryId: string, itemId: string }>();
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (_.has(changes, 'order')) {
-      console.log('ngOnChanges', changes);
-    }
-  }
 
   removeItemFromOrder(categoryId: string, itemId: string) {
     this.itemRemoved.emit({ categoryId, itemId });
   }
 
   getOrderCategories(): Category[] {
-    console.log('getOrderCategories');
-    const withItems = this.order.getCategoriesWithItems();
-    console.log('withItems', withItems);
-    return _.map(withItems, id => {
-      return this.catalog.getCategory(id);
-    });
+    return this.order.keySeq().toArray().sort().map(id => this.catalog.getCategory(id));
   }
 
   getOrderCategoryItems(categoryId: string): Item[] {
-    console.log('getOrderCategoryItems');
-    const orderCategoryItemIds = this.order.getItemIdsForCategory(categoryId);
+    const orderCategoryItemIds = this.order.get(categoryId, List());
     const categoryItems = this.catalog.getCategory(categoryId).items;
 
     return <Item[]>_.sortBy(
       _.values(
-        _.pickBy(categoryItems, item => {
-          return orderCategoryItemIds.indexOf(item.id) !== -1;
-        })
+        _.pickBy(categoryItems, item => orderCategoryItemIds.indexOf(item.id) !== -1)
       ),
       ['id']);
   }

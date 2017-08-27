@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {CatalogService} from './service/catalog-service';
 
-import {Order} from './model/order';
+import {Map, List} from 'immutable';
 import {Catalog} from './model/catalog';
 import {OrderService} from './service/order-service';
 
@@ -18,7 +18,7 @@ export class AppComponent {
   projectLink = 'https://github.com/iamthechad/datacalc-ng';
 
   catalog: Catalog;
-  order: Order;
+  order: Map<string, List<string>>;
 
   catalogLoaded = false;
 
@@ -33,11 +33,7 @@ export class AppComponent {
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });
-    this.orderService.getOrderObservable().subscribe((order: Order) => {
-      console.log(`Order changed: ${this.order === order}`);
-      this.order = order;
-      this.changeDetectorRef.markForCheck();
-    });
+    this.orderService.getOrderObservable().subscribe((order: Map<string, List<string>>) => this.order = order);
   }
 
   categorySelected(categoryId: string): void {
@@ -45,16 +41,25 @@ export class AppComponent {
   }
 
   itemSelected(itemId: string): void {
-    console.log('Adding item to order');
-    this.order.addItem(this.currentCategory, itemId);
+    this.order = this.order.set(this.currentCategory, this.order.get(this.currentCategory, List()).push(itemId));
+    this.orderService.storeOrder(this.order);
   }
 
   itemRemoved(info: { categoryId: string, itemId: string }): void {
-    console.log('Removing item from order');
-    this.order.removeItem(info.categoryId, info.itemId);
+    let categoryItems = this.order.get(info.categoryId, List());
+    const itemIndex = categoryItems.indexOf(info.itemId);
+    if (itemIndex >= 0) {
+      categoryItems = categoryItems.delete(itemIndex);
+      if (categoryItems.isEmpty()) {
+        this.order = this.order.delete(info.categoryId);
+      } else {
+        this.order = this.order.set(info.categoryId, categoryItems);
+      }
+    }
+    this.orderService.storeOrder(this.order);
   }
 
   getItemsForCurrentCategory = () => this.catalog.getItemsForCategory(this.currentCategory);
 
-  getOrderItemsForCurrentCategory = () => this.order.getItemsForCategory(this.currentCategory);
+  getOrderItemsForCurrentCategory = () => this.order.get(this.currentCategory, List());
 }

@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, EventEmitter, Input, Output
+} from '@angular/core';
 import {Item} from '../model/item';
-
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-items',
@@ -20,6 +20,6 @@ export class ItemsComponent {
   }
 
   isItemSelected(item: Item): boolean {
-    return _.indexOf(this.orderItems, item.id) !== -1;
+    return this.orderItems.indexOf(item.id) !== -1;
   }
 }
