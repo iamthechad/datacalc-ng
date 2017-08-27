@@ -7,7 +7,7 @@ import {Catalog} from '../model/catalog';
 import {List, Map} from 'immutable';
 
 @Component({
-  selector: 'app-order',
+  selector: 'mt-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

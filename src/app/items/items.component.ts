@@ -4,7 +4,7 @@ import {
 import {Item} from '../model/item';
 
 @Component({
-  selector: 'app-items',
+  selector: 'mt-items',
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
