@@ -2,7 +2,7 @@
 <div class="data-calc" *ngIf=catalogLoaded>
   <app-catalog [catalog]=catalog (categorySelected)="categorySelected($event)"></app-catalog>
   <app-items [items]="getItemsForCurrentCategory()" [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></app-items>
-  <app-order [catalog]="catalog" [order]="order" (itemRemoved)="itemRemoved($event)"></app-order>
+  <app-order [catalog]=catalog [order]=order (itemRemoved)="itemRemoved($event)"></app-order>
 </div>
 <div *ngIf=!catalogLoaded>
   Loading...

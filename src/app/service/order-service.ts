@@ -1,33 +1,32 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
-import {Order} from '../model/order';
+import {fromJS, List, Map} from "immutable";
 
 @Injectable()
 export class OrderService {
-  private orderObservable: ReplaySubject<Order> = new ReplaySubject();
-
-  private static storeOrder(order: Order) {
-    if (order.isEmpty()) {
-      localStorage.removeItem('order');
-    } else {
-      localStorage.setItem('order', JSON.stringify(order.getFullOrder()));
-    }
-  }
+  private orderObservable: ReplaySubject<Map<string, List<string>>> = new ReplaySubject();
 
   constructor() {
     const localStorageRef = localStorage.getItem('order');
-    let order: Order;
+    let order: Map<string, List<string>>;
     if (localStorageRef) {
-      order = new Order(JSON.parse(localStorageRef));
+      order = fromJS(JSON.parse(localStorageRef));
     } else {
-      order = new Order();
+      order = Map();
     }
-    order.getOrderModifiedObservable().subscribe((modifiedOrder: Order) => OrderService.storeOrder(modifiedOrder));
     this.orderObservable.next(order);
   }
 
-  getOrderObservable(): Observable<Order> {
+  getOrderObservable(): Observable<Map<string, List<string>>> {
     return this.orderObservable.asObservable();
+  }
+
+  storeOrder(order: Map<string, List<string>>) {
+    if (order.isEmpty()) {
+      localStorage.removeItem('order');
+    } else {
+      localStorage.setItem('order', JSON.stringify(order.toJS()));
+    }
   }
 }
