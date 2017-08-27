@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
-import {fromJS, List, Map} from "immutable";
+import {fromJS, List, Map} from 'immutable';
 
 @Injectable()
 export class OrderService {
