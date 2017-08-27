@@ -10,7 +10,18 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "favicon-16x16.ico",
+        "favicon-32x32.ico",
+        "manifest.json",
+        "browserconfig.xml",
+        "mstile-150x150.png",
+        "apple-touch-icon.png",
+        "apple-touch-icon-60x60.png",
+        "apple-touch-icon-76x76.png",
+        "apple-touch-icon-120x120.png",
+        "android-chrome-144x144.png",
+        "safari-pinned-tab.png"
       ],
       "index": "index.html",
       "main": "main.ts",
