@@ -1,11 +1,12 @@
 sudo: false
 language: node_js
+
 node_js:
-  - "6.9"
+- '6.9'
 
 script:
-  - ng lint
+- ng lint
 
 notifications:
   slack:
-    secure: ag9X/xRYA/21GxI7XYORZ85nRmHJ4ZLhdX2FKHh35aYVXOHhnE+6XGxiC4frKJVhrcox71rnoLKV0KzvlN4zjNB4jsEsVaT/NJTWQoK/CySxthYxJAFPW9JDhr6oOw+XF46FmX6Ufit746/17bQykly8zq9c1mbEOg4QB5q5FMM=
+    secure: JDagsb2MGcm9LReT4vZGsuGyf7EkbK4y6m3PKrrr+wqzJUG+5AZ9CGDTn7dGhoyOHGSFonNiaUceSIwVXz8z8/RaIpnRs/bvoUg2fwbdyO0EnK8oeFjQ6ma4O+iJN3iuEHsRUigbCE+9vWIiD3RNznSUjiLVDLB4jgZFBvEbP3zoqQ1xra3HCuBlBywfLPEoQhiFmD1zSbYiOm1Y/P2Ady3Pl9tYtSY/fjeTuY+Y75thjjNNA0bIMh4fdZNTvee3QliM51QD7Dz522a2UvXHF3mBgKBtIhhfflFBJPr8Gcbx73Osi7p5JymOFRP3RMh4tA6a2xzPMHCbtUrNApxJ7kRvAM/4NEvaysIoU+QdEVw48RqgNej4eYOI15vty4fcEt1aEdS2FvfCG8JoHCXF7U4Dhr/zjT3abREbN47ex9m24LbOjBMRZkzsh+YI7VVcW3q1NiqnhDEPHAyjNGrn2gnzeXLKMovQqbwRpYeNOw4f5MNHYNvhxlCMK+kCqFOzVCfJm4UHJyHkss1wqykuSGG+05g+eu9cKmIAskPvq9stiQKWyQMFuvV3AASwVx3UH9LlmOcQWuf/5VeV049H/bLjUVber51pKO+pIvhgNjfBNrZs80fI+kkW5PoD6zJ7QjqWGplJjdtNP2bbDOfQnyYotuCjbdhydsPnn3TJSqw=
