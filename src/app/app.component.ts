@@ -22,14 +22,14 @@ export class AppComponent {
 
   catalogLoaded = false;
 
-  private currentCategory: string;
+  selectedCategory: string;
 
   constructor(private catalogService: CatalogService,
               private orderService: OrderService,
               private changeDetectorRef: ChangeDetectorRef) {
     this.catalogService.getCatalogObservable().subscribe((catalog: Catalog) => {
       this.catalog = catalog;
-      this.currentCategory = this.catalog.getCategoryIds()[0];
+      this.selectedCategory = this.catalog.getCategoryIds()[0];
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });
@@ -37,11 +37,11 @@ export class AppComponent {
   }
 
   categorySelected(categoryId: string): void {
-    this.currentCategory = categoryId;
+    this.selectedCategory = categoryId;
   }
 
   itemSelected(itemId: string): void {
-    this.order = this.order.set(this.currentCategory, this.order.get(this.currentCategory, List()).push(itemId));
+    this.order = this.order.set(this.selectedCategory, this.order.get(this.selectedCategory, List()).push(itemId));
     this.orderService.storeOrder(this.order);
   }
 
@@ -59,7 +59,7 @@ export class AppComponent {
     this.orderService.storeOrder(this.order);
   }
 
-  getItemsForCurrentCategory = () => this.catalog.getItemsForCategory(this.currentCategory);
+  getItemsForCurrentCategory = () => this.catalog.getItemsForCategory(this.selectedCategory);
 
-  getOrderItemsForCurrentCategory = () => this.order.get(this.currentCategory, List());
+  getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, List());
 }

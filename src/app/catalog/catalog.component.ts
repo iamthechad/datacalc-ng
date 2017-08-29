@@ -11,10 +11,11 @@ export class CatalogComponent {
 
   @Input() catalog: Catalog;
 
+  @Input() selectedCategory: string;
+
   @Output() categorySelected = new EventEmitter<string>();
 
   onCategorySelected(categoryId) {
     this.categorySelected.emit(categoryId);
   }
-
 }
