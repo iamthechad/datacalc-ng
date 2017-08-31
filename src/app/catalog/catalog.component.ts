@@ -1,5 +1,7 @@
 import {Component, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@angular/core';
-import {Catalog} from '../model/catalog';
+import {Category} from '../model/category';
+import {Map} from 'immutable';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'mt-catalog',
@@ -9,7 +11,7 @@ import {Catalog} from '../model/catalog';
 })
 export class CatalogComponent {
 
-  @Input() catalog: Catalog;
+  @Input() catalog: Map<string, Category>;
 
   @Input() selectedCategory: string;
 
@@ -17,5 +19,9 @@ export class CatalogComponent {
 
   onCategorySelected(categoryId) {
     this.categorySelected.emit(categoryId);
+  }
+
+  getCategories(): Category[] {
+    return _.sortBy(_.values(this.catalog.valueSeq().toArray()), ['id']);
   }
 }

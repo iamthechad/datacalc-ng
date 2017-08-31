@@ -4,13 +4,13 @@ import {Observable} from 'rxjs/Observable';
 import {AngularFireDatabase, FirebaseObjectObservable} from 'angularfire2/database';
 import {Category} from '../model/category';
 import {Item} from '../model/item';
-import {Catalog} from '../model/catalog';
+import {Map} from 'immutable';
 
 import * as _ from 'lodash';
 
 @Injectable()
 export class CatalogService {
-  private catalogObservable: ReplaySubject<Catalog> = new ReplaySubject();
+  private catalogObservable: ReplaySubject<Map<string, Category>> = new ReplaySubject();
   private item: FirebaseObjectObservable<any[]>;
 
   constructor(ad: AngularFireDatabase) {
@@ -18,7 +18,7 @@ export class CatalogService {
     this.item.subscribe(snapshot => this.buildCatalog(snapshot));
   }
 
-  getCatalogObservable(): Observable<Catalog> {
+  getCatalogObservable(): Observable<Map<string, Category>> {
     return this.catalogObservable.asObservable();
   }
 
@@ -32,6 +32,6 @@ export class CatalogService {
       categoryMap[snapshotItem.category].items[id] = _.merge({id}, snapshotItem);
     });
 
-    this.catalogObservable.next(new Catalog(categoryMap));
+    this.catalogObservable.next(Map(categoryMap));
   }
 }

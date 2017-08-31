@@ -2,8 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/co
 import {CatalogService} from './service/catalog-service';
 
 import {Map, List} from 'immutable';
-import {Catalog} from './model/catalog';
 import {OrderService} from './service/order-service';
+import {Category} from './model/category';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'mt-app-root',
@@ -17,7 +18,7 @@ export class AppComponent {
   // I'd rather put this in a config file, but it's not really an issue for now
   projectLink = 'https://github.com/iamthechad/datacalc-ng';
 
-  catalog: Catalog;
+  catalog: Map<string, Category>;
   order: Map<string, List<string>>;
 
   catalogLoaded = false;
@@ -27,9 +28,9 @@ export class AppComponent {
   constructor(private catalogService: CatalogService,
               private orderService: OrderService,
               private changeDetectorRef: ChangeDetectorRef) {
-    this.catalogService.getCatalogObservable().subscribe((catalog: Catalog) => {
+    this.catalogService.getCatalogObservable().subscribe((catalog: Map<string, Category>) => {
       this.catalog = catalog;
-      this.selectedCategory = this.catalog.getCategoryIds()[0];
+      this.selectedCategory = this.catalog.keySeq().toArray().sort()[0];
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });
@@ -59,7 +60,7 @@ export class AppComponent {
     this.orderService.storeOrder(this.order);
   }
 
-  getItemsForCurrentCategory = () => this.catalog.getItemsForCategory(this.selectedCategory);
+  getItemsForCurrentCategory = () => _.sortBy(_.values(this.catalog.get(this.selectedCategory).items), ['id']);
 
   getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, List());
 }
