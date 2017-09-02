@@ -3,7 +3,6 @@ import {Category} from '../model/category';
 
 import * as _ from 'lodash';
 import {Item} from '../model/item';
-import {Catalog} from '../model/catalog';
 import {List, Map} from 'immutable';
 
 @Component({
@@ -13,7 +12,7 @@ import {List, Map} from 'immutable';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderComponent {
-  @Input() catalog: Catalog;
+  @Input() catalog: Map<string, Category>;
 
   @Input() order: Map<string, List<string>>;
 
@@ -24,12 +23,12 @@ export class OrderComponent {
   }
 
   getOrderCategories(): Category[] {
-    return this.order.keySeq().toArray().sort().map(id => this.catalog.getCategory(id));
+    return this.order.keySeq().toArray().sort().map(id => this.catalog.get(id));
   }
 
   getOrderCategoryItems(categoryId: string): Item[] {
     const orderCategoryItemIds = this.order.get(categoryId, List());
-    const categoryItems = this.catalog.getCategory(categoryId).items;
+    const categoryItems = this.catalog.get(categoryId).items;
 
     return <Item[]>_.sortBy(
       _.values(

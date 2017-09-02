@@ -2,7 +2,7 @@
   <md-card-title>Categories</md-card-title>
   <md-card-content>
     <md-list>
-      <md-list-item *ngFor="let category of catalog.getCategories()">
+      <md-list-item *ngFor="let category of getCategories()">
         <button md-button (click)="onCategorySelected(category.id)" class="catalog-entry" [class.selected]="category.id === selectedCategory"><md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon> {{category.name}}</button>
       </md-list-item>
     </md-list>
