@@ -1,11 +1,13 @@
 sudo: false
 language: node_js
+addons:
+  chrome: stable
 
 node_js:
 - '6.9'
 
 script:
-- ng lint
+- ng test && ng lint
 
 notifications:
   slack:
