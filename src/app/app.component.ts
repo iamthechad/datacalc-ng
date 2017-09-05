@@ -5,6 +5,7 @@ import {Map, List} from 'immutable';
 import {OrderService} from './service/order-service';
 import {Category} from './model/category';
 import * as _ from 'lodash';
+import {Util} from './common/Util';
 
 @Component({
   selector: 'mt-app-root',
@@ -60,7 +61,7 @@ export class AppComponent {
     this.orderService.storeOrder(this.order);
   }
 
-  getItemsForCurrentCategory = () => _.sortBy(_.values(this.catalog.get(this.selectedCategory).items), ['id']);
+  getItemsForCurrentCategory = () => Util.getItemsForCategory(this.catalog, this.selectedCategory);
 
   getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, List());
 }
