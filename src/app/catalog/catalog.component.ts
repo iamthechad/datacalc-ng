@@ -22,6 +22,10 @@ export class CatalogComponent {
   }
 
   getCategories(): Category[] {
-    return _.sortBy(_.values(this.catalog.valueSeq().toArray()), ['id']);
+    if (this.catalog) {
+      return _.sortBy(_.values(this.catalog.valueSeq().toArray()), ['id']);
+    }
+
+    return [];
   }
 }
