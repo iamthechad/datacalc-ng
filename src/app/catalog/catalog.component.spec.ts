@@ -43,9 +43,20 @@ describe('CatalogComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  let category1: Category;
-  let category2: Category;
-  let catalog: Map<string, Category>;
+  const catalog = Map({
+    foo2: {
+      id: 'category2',
+      name: 'category 2',
+      icon: 'category2',
+      items: {}
+    },
+    foo1: {
+      id: 'category1',
+      name: 'category 1',
+      icon: 'category1',
+      items: {}
+    }
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -59,23 +70,6 @@ describe('CatalogComponent', () => {
   }));
 
   beforeEach(() => {
-    category1 = {
-      id: 'category1',
-      name: 'category 1',
-      icon: 'category1',
-      items: {}
-    };
-    category2 = {
-      id: 'category2',
-      name: 'category 2',
-      icon: 'category2',
-      items: {}
-    };
-    catalog = Map({
-      foo2: category2,
-      foo1: category1
-    });
-
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
