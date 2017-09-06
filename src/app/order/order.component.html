@@ -1,18 +1,18 @@
 <md-card class="order-container">
   <md-card-title>Your Data Value</md-card-title>
   <md-card-content>
-    <md-list *ngFor="let orderCategory of getOrderCategories()">
-      <md-list-item>{{ orderCategory.name }}</md-list-item>
+    <md-list *ngFor="let orderCategory of getOrderCategories()" class="order-category" [attr.data-category-id]="orderCategory.id">
+      <md-list-item class="order-category-name">{{ orderCategory.name }}</md-list-item>
       <md-list-item *ngFor="let item of getOrderCategoryItems(orderCategory.id)">
-        <span md-line>{{ item.name }}</span><button md-button (click)="removeItemFromOrder(orderCategory.id, item.id)"><md-icon md-list-icon fontSet="icomoon" fontIcon="icon-cancel-circle"></md-icon></button>
-        <span md-line>{{ item.value | price }}</span>
+        <span md-line class="order-item" [attr.data-item-id]="item.id">{{ item.name }}</span><button md-button (click)="removeItemFromOrder(orderCategory.id, item.id)" class="item-remove"><md-icon md-list-icon fontSet="icomoon" fontIcon="icon-cancel-circle"></md-icon></button>
+        <span md-line class="order-item-price">{{ item.value | price }}</span>
       </md-list-item>
     </md-list>
     <md-divider></md-divider>
     <md-list>
       <md-list-item>
         <span md-line>Total</span>
-        <span md-line>{{ getOrderTotal() | price }}</span>
+        <span md-line class="order-total">{{ getOrderTotal() | price }}</span>
       </md-list-item>
     </md-list>
   </md-card-content>

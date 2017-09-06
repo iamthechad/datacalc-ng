@@ -1,9 +1,10 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Category} from '../model/category';
 
 import * as _ from 'lodash';
 import {Item} from '../model/item';
 import {List, Map} from 'immutable';
+import {Util} from '../common/Util';
 
 @Component({
   selector: 'mt-order',
@@ -22,27 +23,9 @@ export class OrderComponent {
     this.itemRemoved.emit({ categoryId, itemId });
   }
 
-  getOrderCategories(): Category[] {
-    return this.order.keySeq().toArray().sort().map(id => this.catalog.get(id));
-  }
+  getOrderCategories = (): Category[] => Util.getCategoriesForOrder(this.order, this.catalog);
 
-  getOrderCategoryItems(categoryId: string): Item[] {
-    const orderCategoryItemIds = this.order.get(categoryId, List());
-    const categoryItems = this.catalog.get(categoryId).items;
+  getOrderCategoryItems = (categoryId: string): Item[] => Util.getOrderCategoryItems(this.order, this.catalog, categoryId);
 
-    return <Item[]>_.sortBy(
-      _.values(
-        _.pickBy(categoryItems, item => orderCategoryItemIds.indexOf(item.id) !== -1)
-      ),
-      ['id']);
-  }
-
-  getOrderTotal(): number {
-    return _.reduce(this.getOrderCategories(), (prevTotal: number, category) => {
-      const categoryTotal = _.reduce(this.getOrderCategoryItems(category.id), (itemPrevTotal: number, item: Item) => {
-        return itemPrevTotal + item.value;
-      }, 0);
-      return prevTotal + categoryTotal;
-    }, 0);
-  }
+  getOrderTotal = (): number => Util.getOrderTotal(this.order, this.catalog);
 }
