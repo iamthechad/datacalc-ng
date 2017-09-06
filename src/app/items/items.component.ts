@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy, Component, EventEmitter, Input, Output
 } from '@angular/core';
 import {Item} from '../model/item';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'mt-items',
@@ -20,6 +21,6 @@ export class ItemsComponent {
   }
 
   isItemSelected(item: Item): boolean {
-    return this.orderItems.indexOf(item.id) !== -1;
+    return _.indexOf(this.orderItems, item.id) !== -1;
   }
 }
