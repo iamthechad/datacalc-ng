@@ -9,7 +9,7 @@ export class Util {
   }
 
   static getItemsForCategory(catalog: Map<string, Category>, categoryId: string) {
-    if (catalog) {
+    if (catalog && catalog.has(categoryId)) {
       return _.sortBy(_.values(catalog.get(categoryId).items), ['id']);
     }
 
