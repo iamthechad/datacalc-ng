@@ -3,13 +3,12 @@
   display: flex;
   height: 90vh;
   max-width: 1500px;
-  margin-bottom: 5vh;
   justify-content: center;
   flex: 1;
   & > * {
     position: relative;
     background: white;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
     overflow: scroll;
     &:first-child {
       flex-shrink: 1; // take 4x the extra room
@@ -18,7 +17,7 @@
     &:nth-child(2) {
       border-left: 0;
       border-right: 0;
-      min-width: 300px;
+      flex-basis: 40%;
     }
     &:last-child {
       flex-shrink: 1; // take 4x the extra room
