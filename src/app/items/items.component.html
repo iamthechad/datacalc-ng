@@ -5,18 +5,18 @@
     <md-card-content>
       <md-list>
         <md-list-item *ngIf="item.description || item.note">
-          <span md-line *ngIf="item.description" class="item-description">{{ item.description.join(', ') }}</span>
-          <span md-line *ngIf="item.note" class="item-note">{{ item.note }}</span>
+          <span mdLine *ngIf="item.description" class="item-description text-wrap">{{ item.description.join(', ') }}</span>
+          <span mdLine *ngIf="item.note" class="item-note text-wrap">{{ item.note }}</span>
         </md-list-item>
         <md-divider *ngIf="item.description || item.note"></md-divider>
         <md-list-item>
-          <span md-line>Commercial Source</span>
-          <span md-line class="item-commercial"><a
+          <span mdLine>Commercial Source</span>
+          <span mdLine class="item-commercial"><a
             href="{{item.commercialSource}}">{{ item.commercialSource }}</a></span>
         </md-list-item>
         <md-list-item *ngIf="item.probableSource">
-          <span md-line>Probable Source</span>
-          <span md-line class="item-probable">{{ item.probableSource }}</span>
+          <span mdLine>Probable Source</span>
+          <span mdLine class="item-probable">{{ item.probableSource }}</span>
         </md-list-item>
       </md-list>
     </md-card-content>
