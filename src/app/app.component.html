@@ -1,8 +1,8 @@
 <mt-header [title]=title [projectLink]=projectLink></mt-header>
 <div class="data-calc" *ngIf=catalogLoaded>
-  <mt-catalog [catalog]=catalog [selectedCategory]=selectedCategory (categorySelected)="categorySelected($event)"></mt-catalog>
-  <mt-items [items]="getItemsForCurrentCategory()" [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></mt-items>
-  <mt-order [catalog]=catalog [order]=order (itemRemoved)="itemRemoved($event)"></mt-order>
+  <mt-catalog class="column-element" [catalog]=catalog [selectedCategory]=selectedCategory (categorySelected)="categorySelected($event)"></mt-catalog>
+  <mt-items class="column-element" [items]="getItemsForCurrentCategory()" [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></mt-items>
+  <mt-order class="column-element" [catalog]=catalog [order]=order (itemRemoved)="itemRemoved($event)"></mt-order>
 </div>
 <div *ngIf=!catalogLoaded>
   Loading...
