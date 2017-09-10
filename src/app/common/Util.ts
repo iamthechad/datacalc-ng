@@ -1,5 +1,5 @@
 import {Category} from '../model/category';
-import {List, Map} from 'immutable';
+import {Set, Map} from 'immutable';
 import * as _ from 'lodash';
 import {Item} from '../model/item';
 
@@ -16,7 +16,7 @@ export class Util {
     return [];
   }
 
-  static getCategoriesForOrder(order: Map<string, List<string>>, catalog: Map<string, Category>): Category[] {
+  static getCategoriesForOrder(order: Map<string, Set<string>>, catalog: Map<string, Category>): Category[] {
     if (order) {
       return _.compact(order.keySeq().toArray().sort().map(id => (catalog ? catalog.get(id) : null)));
     }
@@ -24,8 +24,8 @@ export class Util {
     return [];
   }
 
-  static getOrderCategoryItems(order: Map<string, List<string>>, catalog: Map<string, Category>, categoryId: string): Item[] {
-    const orderCategoryItemIds = order ? order.get(categoryId, List()) : List();
+  static getOrderCategoryItems(order: Map<string, Set<string>>, catalog: Map<string, Category>, categoryId: string): Item[] {
+    const orderCategoryItemIds = order ? order.get(categoryId, Set()) : Set();
     const categoryItems = (catalog && catalog.has(categoryId)) ? catalog.get(categoryId).items : [];
 
     return <Item[]>_.sortBy(
@@ -35,7 +35,7 @@ export class Util {
       ['id']);
   }
 
-  static getOrderTotal(order: Map<string, List<string>>, catalog: Map<string, Category>): number {
+  static getOrderTotal(order: Map<string, Set<string>>, catalog: Map<string, Category>): number {
     return _.reduce(Util.getCategoriesForOrder(order, catalog), (prevTotal: number, category) => {
       const categoryTotal = _.reduce(Util.getOrderCategoryItems(order, catalog, category.id), (itemPrevTotal: number, item: Item) => {
         return itemPrevTotal + item.value;

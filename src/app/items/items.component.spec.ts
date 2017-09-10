@@ -6,8 +6,8 @@ import {PricePipe} from '../price.pipe';
 import {By} from '@angular/platform-browser';
 import {Item} from '../model/item';
 import {Component, DebugElement} from '@angular/core';
+import {Set} from 'immutable';
 import {Util} from '../common/Util';
-import * as _ from 'lodash';
 
 @Component({
   template: `
@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 })
 class TestItemsHostComponent {
   items: Item[];
-  orderItems: string[];
+  orderItems: Set<string>;
   selectedItem: string;
   itemSelected(itemId: string) { this.selectedItem = itemId; }
 }
@@ -28,7 +28,7 @@ function verifyCard(card: DebugElement, expectedItem: Item, cardShouldBeSelected
   expect(cardName.nativeElement.textContent).toEqual(expectedItem.name);
   const cardPrice = card.query(By.css('.item-price'));
   expect(cardPrice.nativeElement.textContent).toEqual(Util.formatPrice(expectedItem.value));
-  if (_.has(expectedItem, 'description')) {
+  if (expectedItem.hasOwnProperty('description')) {
     const cardDescription = card.query(By.css('.item-description'));
     expect(cardDescription).toBeTruthy();
     const descriptionText = cardDescription.nativeElement.textContent;
@@ -36,14 +36,14 @@ function verifyCard(card: DebugElement, expectedItem: Item, cardShouldBeSelected
       expect(descriptionText).toContain(line);
     });
   }
-  if (_.has(expectedItem, 'note')) {
+  if (expectedItem.hasOwnProperty('note')) {
     const cardNote = card.query(By.css('.item-note'));
     expect(cardNote).toBeTruthy();
     expect(cardNote.nativeElement.textContent).toEqual(expectedItem.note);
   }
   const cardCommercialSource = card.query(By.css('.item-commercial'));
   expect(cardCommercialSource.nativeElement.textContent).toEqual(expectedItem.commercialSource);
-  if (_.has(expectedItem, 'probableSource')) {
+  if (expectedItem.hasOwnProperty('probableSource')) {
     const cardProbableSource = card.query(By.css('.item-probable'));
     expect(cardProbableSource.nativeElement.textContent).toEqual(expectedItem.probableSource);
   }
@@ -124,7 +124,7 @@ describe('ItemsComponent', () => {
 
   it('should show items with none selected matching order', () => {
     component.items = items;
-    component.orderItems = ['abc', '123'];
+    component.orderItems = Set(['abc', '123']);
     fixture.detectChanges();
     const itemCards = fixture.debugElement.queryAll(By.css('.category-item'));
     expect(itemCards.length).toEqual(items.length);
@@ -135,7 +135,7 @@ describe('ItemsComponent', () => {
 
   it('should show items with one selected matching order', () => {
     component.items = items;
-    component.orderItems = ['item2'];
+    component.orderItems = Set(['item2']);
     fixture.detectChanges();
     const expectedSelectIndex = 1;
     const itemCards = fixture.debugElement.queryAll(By.css('.category-item'));

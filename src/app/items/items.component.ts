@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, Component, EventEmitter, Input, Output
 } from '@angular/core';
 import {Item} from '../model/item';
-import * as _ from 'lodash';
+import {Set} from 'immutable';
 
 @Component({
   selector: 'mt-items',
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 })
 export class ItemsComponent {
   @Input() items: Item[];
-  @Input() orderItems: string[];
+  @Input() orderItems: Set<string>;
 
   @Output() itemSelected = new EventEmitter<string>();
 
@@ -21,6 +21,6 @@ export class ItemsComponent {
   }
 
   isItemSelected(item: Item): boolean {
-    return _.indexOf(this.orderItems, item.id) !== -1;
+    return this.orderItems && this.orderItems.has(item.id);
   }
 }
