@@ -1,7 +1,15 @@
+@mixin text-wrap {
+  white-space: normal !important;
+}
+
 .items-container {
   min-height: calc(100% - 48px);
 }
 
-.text-wrap {
-  white-space: normal !important;
+.item-description {
+  @include text-wrap;
+}
+
+.item-note {
+  @include text-wrap;
 }
