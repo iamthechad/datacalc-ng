@@ -1,7 +1,7 @@
 .data-calc {
   font-family: 'Roboto', sans-serif;
   display: flex;
-  height: 90vh;
+  height: 93vh;
   max-width: 1500px;
   justify-content: center;
   flex: 1;
@@ -9,7 +9,7 @@
     position: relative;
     background: white;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-    overflow: scroll;
+    overflow: auto;
     &:first-child {
       flex-shrink: 1; // take 4x the extra room
       flex-basis: 30%;
@@ -24,4 +24,8 @@
       flex-basis: 30%;
     }
   }
+}
+
+.column-element {
+  height: 100%;
 }
