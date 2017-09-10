@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {CatalogService} from './service/catalog-service';
 
-import {Map, List} from 'immutable';
+import {Map, Set} from 'immutable';
 import {OrderService} from './service/order-service';
 import {Category} from './model/category';
-import * as _ from 'lodash';
 import {Util} from './common/Util';
 
 @Component({
@@ -20,7 +19,7 @@ export class AppComponent {
   projectLink = 'https://github.com/iamthechad/datacalc-ng';
 
   catalog: Map<string, Category>;
-  order: Map<string, List<string>>;
+  order: Map<string, Set<string>>;
 
   catalogLoaded = false;
 
@@ -35,7 +34,7 @@ export class AppComponent {
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });
-    this.orderService.getOrderObservable().subscribe((order: Map<string, List<string>>) => this.order = order);
+    this.orderService.getOrderObservable().subscribe((order: Map<string, Set<string>>) => this.order = order);
   }
 
   categorySelected(categoryId: string): void {
@@ -43,15 +42,14 @@ export class AppComponent {
   }
 
   itemSelected(itemId: string): void {
-    this.order = this.order.set(this.selectedCategory, this.order.get(this.selectedCategory, List()).push(itemId));
+    this.order = this.order.set(this.selectedCategory, this.order.get(this.selectedCategory, Set()).add(itemId));
     this.orderService.storeOrder(this.order);
   }
 
   itemRemoved(info: { categoryId: string, itemId: string }): void {
-    let categoryItems = this.order.get(info.categoryId, List());
-    const itemIndex = categoryItems.indexOf(info.itemId);
-    if (itemIndex >= 0) {
-      categoryItems = categoryItems.delete(itemIndex);
+    let categoryItems = this.order.get(info.categoryId, Set());
+    if (categoryItems.has(info.itemId)) {
+      categoryItems = categoryItems.delete(info.itemId);
       if (categoryItems.isEmpty()) {
         this.order = this.order.delete(info.categoryId);
       } else {
@@ -63,5 +61,5 @@ export class AppComponent {
 
   getItemsForCurrentCategory = () => Util.getItemsForCategory(this.catalog, this.selectedCategory);
 
-  getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, List());
+  getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, Set());
 }

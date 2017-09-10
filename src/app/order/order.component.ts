@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Category} from '../model/category';
 
-import * as _ from 'lodash';
 import {Item} from '../model/item';
-import {List, Map} from 'immutable';
+import {Set, Map} from 'immutable';
 import {Util} from '../common/Util';
 
 @Component({
@@ -15,7 +14,7 @@ import {Util} from '../common/Util';
 export class OrderComponent {
   @Input() catalog: Map<string, Category>;
 
-  @Input() order: Map<string, List<string>>;
+  @Input() order: Map<string, Set<string>>;
 
   @Output() itemRemoved = new EventEmitter<{ categoryId: string, itemId: string }>();
 

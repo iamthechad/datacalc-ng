@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { OrderComponent } from './order.component';
 import {Component, DebugElement} from '@angular/core';
 import {Category} from '../model/category';
-import {List, Map} from 'immutable';
+import {Set, Map} from 'immutable';
 import {MdCardModule, MdIconModule, MdListModule} from '@angular/material';
 import {PricePipe} from '../price.pipe';
 import {By} from '@angular/platform-browser';
@@ -17,12 +17,12 @@ import {Item} from '../model/item';
 })
 class TestHostComponent {
   catalog: Map<string, Category>;
-  order: Map<string, List<string>>;
+  order: Map<string, Set<string>>;
   selectedItem: string;
   itemRemoved(itemId: string) { this.selectedItem = itemId; }
 }
 
-function verifyOrder(itemList: DebugElement[], order: Map<string, List<string>>, catalog: Map<string, Category>) {
+function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Map<string, Category>) {
   const expectedCategories = Util.getCategoriesForOrder(order, catalog);
   expect(itemList.length).toEqual(expectedCategories.length);
 
@@ -128,7 +128,7 @@ describe('OrderComponent', () => {
 
   it('should have one item', () => {
     const order = Map({
-      category1: List(['item11'])
+      category1: Set(['item11'])
     });
     component.catalog = catalog;
     component.order = order;
@@ -140,8 +140,8 @@ describe('OrderComponent', () => {
 
   it('should have one item from each category', () => {
     const order = Map({
-      category1: List(['item11']),
-      category2: List(['item22'])
+      category1: Set(['item11']),
+      category2: Set(['item22'])
     });
 
     component.catalog = catalog;
@@ -154,7 +154,7 @@ describe('OrderComponent', () => {
 
   it('should not fail for invalid category', () => {
     const order = Map({
-      foo1: List(['item11'])
+      foo1: Set(['item11'])
     });
     component.catalog = catalog;
     component.order = order;
@@ -166,7 +166,7 @@ describe('OrderComponent', () => {
 
   it('should not fail for invalid item id', () => {
     const order = Map({
-      category1: List(['itemXX'])
+      category1: Set(['itemXX'])
     });
     component.catalog = catalog;
     component.order = order;
@@ -178,7 +178,7 @@ describe('OrderComponent', () => {
 
   it('should send item removed event', () => {
     const order = Map({
-      category1: List(['item11'])
+      category1: Set(['item11'])
     });
     component.catalog = catalog;
     component.order = order;
