@@ -12,7 +12,7 @@
     <md-list>
       <md-list-item>
         <span mdLine>Total</span>
-        <span mdLine class="order-total">{{ getOrderTotal() | price }}</span>
+        <span #orderTotalElement mdLine class="order-total">{{ orderTotal | price }}</span>
       </md-list-item>
     </md-list>
   </md-card-content>
