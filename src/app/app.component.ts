@@ -3,8 +3,8 @@ import {CatalogService} from './service/catalog-service';
 
 import {Map, Set} from 'immutable';
 import {OrderService} from './service/order-service';
-import {Category} from './model/category';
 import {Util} from './common/Util';
+import {Catalog} from './model/catalog';
 
 @Component({
   selector: 'mt-app-root',
@@ -18,7 +18,7 @@ export class AppComponent {
   // I'd rather put this in a config file, but it's not really an issue for now
   projectLink = 'https://github.com/iamthechad/datacalc-ng';
 
-  catalog: Map<string, Category>;
+  catalog: Catalog;
   order: Map<string, Set<string>>;
 
   catalogLoaded = false;
@@ -28,9 +28,9 @@ export class AppComponent {
   constructor(private catalogService: CatalogService,
               private orderService: OrderService,
               private changeDetectorRef: ChangeDetectorRef) {
-    this.catalogService.getCatalogObservable().subscribe((catalog: Map<string, Category>) => {
+    this.catalogService.getCatalogObservable().subscribe((catalog: Catalog) => {
       this.catalog = catalog;
-      this.selectedCategory = this.catalog.keySeq().toArray().sort()[0];
+      this.selectedCategory = this.catalog.entries.keySeq().toArray().sort()[0];
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });

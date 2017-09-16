@@ -1,8 +1,8 @@
 import {Item} from './item';
 
 export interface Category {
-  id: string;
-  name: string;
-  icon: string;
-  items: { [key: string]: Item };
+  readonly id: string;
+  readonly name: string;
+  readonly icon: string;
+  readonly items: { [key: string]: Item };
 }

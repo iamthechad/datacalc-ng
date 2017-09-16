@@ -9,6 +9,7 @@ import {PricePipe} from '../price.pipe';
 import {By} from '@angular/platform-browser';
 import {Util} from '../common/Util';
 import {Item} from '../model/item';
+import {Catalog} from '../model/catalog';
 
 @Component({
   template: `
@@ -16,13 +17,13 @@ import {Item} from '../model/item';
     `
 })
 class TestHostComponent {
-  catalog: Map<string, Category>;
+  catalog: Catalog;
   order: Map<string, Set<string>>;
   selectedItem: string;
   itemRemoved(itemId: string) { this.selectedItem = itemId; }
 }
 
-function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Map<string, Category>) {
+function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Catalog) {
   const expectedCategories = Util.getCategoriesForOrder(order, catalog);
   expect(itemList.length).toEqual(expectedCategories.length);
 
@@ -54,7 +55,7 @@ describe('OrderComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  const catalog = Map({
+  const catalog = <Catalog>{ entries: Map({
     category2: {
       id: 'category2',
       name: 'category 2',
@@ -97,7 +98,8 @@ describe('OrderComponent', () => {
         }
       }
     }
-  });
+  })
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
