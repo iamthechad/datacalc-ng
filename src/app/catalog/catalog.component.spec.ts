@@ -1,26 +1,30 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {Map} from 'immutable';
-import { By } from '@angular/platform-browser';
+import {By} from '@angular/platform-browser';
 import {Component, DebugElement} from '@angular/core';
 
-import { CatalogComponent } from './catalog.component';
+import {CatalogComponent} from './catalog.component';
 import {MdCardModule, MdIconModule} from '@angular/material';
-import {Category} from '../model/category';
+import {Catalog} from '../model/catalog';
 
 @Component({
   template: `
-    <mt-catalog [catalog]=catalog [selectedCategory]=selectedCategory (categorySelected)="categorySelected($event)"></mt-catalog>`
+    <mt-catalog [catalog]=catalog [selectedCategory]=selectedCategory
+                (categorySelected)="categorySelected($event)"></mt-catalog>`
 })
 class TestHostComponent {
-  catalog: Map<string, Category>;
+  catalog: Catalog;
   selectedCategory: string;
-  categorySelected(categoryId: string) { this.selectedCategory = categoryId; }
+
+  categorySelected(categoryId: string) {
+    this.selectedCategory = categoryId;
+  }
 }
 
-function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catalog: Map<string, Category>) {
+function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catalog: Catalog) {
   const categoryButtons = fixture.debugElement.queryAll(By.css('.catalog-entry'));
-  expect(categoryButtons.length).toEqual(catalog.valueSeq().size);
+  expect(categoryButtons.length).toEqual(catalog.entries.valueSeq().size);
   categoryButtons.forEach((button: DebugElement, index: number) => {
     expect(button.nativeElement.textContent).toContain(`category ${index + 1}`);
   });
@@ -43,30 +47,32 @@ describe('CatalogComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  const catalog = Map({
-    foo2: {
-      id: 'category2',
-      name: 'category 2',
-      icon: 'category2',
-      items: {}
-    },
-    foo1: {
-      id: 'category1',
-      name: 'category 1',
-      icon: 'category1',
-      items: {}
-    }
-  });
+  const catalog = <Catalog>{
+    entries: Map({
+      foo2: {
+        id: 'category2',
+        name: 'category 2',
+        icon: 'category2',
+        items: {}
+      },
+      foo1: {
+        id: 'category1',
+        name: 'category 1',
+        icon: 'category1',
+        items: {}
+      }
+    })
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CatalogComponent, TestHostComponent ],
+      declarations: [CatalogComponent, TestHostComponent],
       imports: [
         MdCardModule,
         MdIconModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

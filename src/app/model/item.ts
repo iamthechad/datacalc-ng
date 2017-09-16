@@ -1,10 +1,10 @@
 export interface Item {
-  id: string;
-  category: string;
-  name: string;
-  value: number;
-  probableSource?: string;
-  commercialSource: string;
-  description?: string[];
-  note?: string;
+  readonly id: string;
+  readonly category: string;
+  readonly name: string;
+  readonly value: number;
+  readonly probableSource?: string;
+  readonly commercialSource: string;
+  readonly description?: string[];
+  readonly note?: string;
 }

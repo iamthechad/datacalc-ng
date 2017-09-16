@@ -2,6 +2,7 @@ import {Util} from './Util';
 import {Category} from '../model/category';
 import {Item} from '../model/item';
 import {Set, Map} from 'immutable';
+import {Catalog} from '../model/catalog';
 
 describe('Util functions', () => {
   const item1: Item = {
@@ -50,10 +51,12 @@ describe('Util functions', () => {
     items: { item3, item4 }
   };
 
-  const catalog: Map<string, Category> = Map({
-    category1: category1,
-    category2: category2
-  });
+  const catalog: Catalog = <Catalog>{
+    entries: Map({
+      category1: category1,
+      category2: category2
+    })
+  };
 
   const order: Map<string, Set<string>> = Map({
     category1: Set(['item1'])

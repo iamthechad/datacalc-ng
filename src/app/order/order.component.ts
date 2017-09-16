@@ -7,6 +7,7 @@ import {Category} from '../model/category';
 import {Item} from '../model/item';
 import {Set, Map} from 'immutable';
 import {Util} from '../common/Util';
+import {Catalog} from '../model/catalog';
 
 @Component({
   selector: 'mt-order',
@@ -15,7 +16,7 @@ import {Util} from '../common/Util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderComponent implements OnChanges {
-  @Input() catalog: Map<string, Category>;
+  @Input() catalog: Catalog;
 
   @Input() order: Map<string, Set<string>>;
 

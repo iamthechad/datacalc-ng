@@ -32,6 +32,7 @@
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "rxjs": "^5.4.3",
+    "typed-immutable-record": "0.0.6",
     "zone.js": "^0.8.16"
   },
   "devDependencies": {
