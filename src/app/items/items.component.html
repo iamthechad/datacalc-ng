@@ -1,27 +1,27 @@
 <div class="items-container">
-  <md-card *ngFor="let item of items" id="{{item.id}}" class="category-item">
-    <md-card-title class="item-title">{{ item.name }}</md-card-title>
-    <md-card-subtitle class="item-price">{{ item.value | price }}</md-card-subtitle>
-    <md-card-content>
-      <md-list>
-        <md-list-item *ngIf="item.description || item.note">
-          <span mdLine *ngIf="item.description" class="item-description text-wrap">{{ item.description.join(', ') }}</span>
-          <span mdLine *ngIf="item.note" class="item-note text-wrap">{{ item.note }}</span>
-        </md-list-item>
-        <md-divider *ngIf="item.description || item.note"></md-divider>
-        <md-list-item>
-          <span mdLine>Commercial Source</span>
-          <span mdLine class="item-commercial"><a
+  <mat-card *ngFor="let item of items" id="{{item.id}}" class="category-item">
+    <mat-card-title class="item-title">{{ item.name }}</mat-card-title>
+    <mat-card-subtitle class="item-price">{{ item.value | price }}</mat-card-subtitle>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngIf="item.description || item.note">
+          <span matLine *ngIf="item.description" class="item-description text-wrap">{{ item.description.join(', ') }}</span>
+          <span matLine *ngIf="item.note" class="item-note text-wrap">{{ item.note }}</span>
+        </mat-list-item>
+        <mat-divider *ngIf="item.description || item.note"></mat-divider>
+        <mat-list-item>
+          <span matLine>Commercial Source</span>
+          <span matLine class="item-commercial"><a
             href="{{item.commercialSource}}">{{ item.commercialSource }}</a></span>
-        </md-list-item>
-        <md-list-item *ngIf="item.probableSource">
-          <span mdLine>Probable Source</span>
-          <span mdLine class="item-probable">{{ item.probableSource }}</span>
-        </md-list-item>
-      </md-list>
-    </md-card-content>
-    <md-card-actions *ngIf="!isItemSelected(item)">
-      <button md-button (click)="onItemSelected(item.id)" class="item-select">Select</button>
-    </md-card-actions>
-  </md-card>
+        </mat-list-item>
+        <mat-list-item *ngIf="item.probableSource">
+          <span matLine>Probable Source</span>
+          <span matLine class="item-probable">{{ item.probableSource }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions *ngIf="!isItemSelected(item)">
+      <button mat-button (click)="onItemSelected(item.id)" class="item-select">Select</button>
+    </mat-card-actions>
+  </mat-card>
 </div>

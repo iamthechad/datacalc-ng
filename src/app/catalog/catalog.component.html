@@ -1,11 +1,11 @@
-<md-card class="catalog-container">
-  <md-card-title>Categories</md-card-title>
-  <md-card-content>
-    <md-list>
-      <md-list-item *ngFor="let category of getCategories()">
-        <button md-button (click)="onCategorySelected(category.id)" class="catalog-entry" [class.selected]="category.id === selectedCategory"><md-icon md-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></md-icon> {{category.name}}</button>
-      </md-list-item>
-    </md-list>
-  </md-card-content>
-</md-card>
+<mat-card class="catalog-container">
+  <mat-card-title>Categories</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let category of getCategories()">
+        <button mat-button (click)="onCategorySelected(category.id)" class="catalog-entry" [class.selected]="category.id === selectedCategory"><mat-icon mat-list-icon fontSet="icomoon" fontIcon="{{ category.icon }}"></mat-icon> {{category.name}}</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
 

@@ -5,7 +5,7 @@ import {By} from '@angular/platform-browser';
 import {Component, DebugElement} from '@angular/core';
 
 import {CatalogComponent} from './catalog.component';
-import {MdCardModule, MdIconModule} from '@angular/material';
+import {MatCardModule, MatIconModule, MatListModule} from '@angular/material';
 import {Catalog} from '../model/catalog';
 
 @Component({
@@ -68,8 +68,9 @@ describe('CatalogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [CatalogComponent, TestHostComponent],
       imports: [
-        MdCardModule,
-        MdIconModule
+        MatCardModule,
+        MatIconModule,
+        MatListModule
       ]
     })
       .compileComponents();

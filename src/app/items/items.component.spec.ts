@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemsComponent } from './items.component';
-import {MdButtonModule, MdCardModule, MdListModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatListModule} from '@angular/material';
 import {PricePipe} from '../price.pipe';
 import {By} from '@angular/platform-browser';
 import {Item} from '../model/item';
@@ -89,9 +89,9 @@ describe('ItemsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ ItemsComponent, TestItemsHostComponent, PricePipe ],
       imports: [
-        MdCardModule,
-        MdButtonModule,
-        MdListModule
+        MatCardModule,
+        MatButtonModule,
+        MatListModule
       ]
     })
     .compileComponents();
