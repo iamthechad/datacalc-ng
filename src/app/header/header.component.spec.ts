@@ -1,10 +1,8 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 
 import { HeaderComponent } from './header.component';
-import {MdIconModule, MdToolbarModule} from '@angular/material';
+import {MatIconModule, MatToolbarModule} from '@angular/material';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -14,8 +12,8 @@ describe('HeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ HeaderComponent ],
       imports: [
-        MdToolbarModule,
-        MdIconModule,
+        MatToolbarModule,
+        MatIconModule,
       ]
     })
     .compileComponents();

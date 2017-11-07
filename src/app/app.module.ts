@@ -2,8 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
-import {MdButtonModule, MdCardModule, MdIconModule, MdListModule, MdToolbarModule} from '@angular/material';
+import {HttpClientModule} from '@angular/common/http';
+import {MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatToolbarModule} from '@angular/material';
 import {AngularFireModule} from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 
@@ -33,14 +33,14 @@ import {OrderService} from './service/order-service';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    MdToolbarModule,
-    MdCardModule,
-    MdIconModule,
-    MdButtonModule,
-    MdListModule
+    MatToolbarModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule
   ],
   providers: [CatalogService, OrderService],
   bootstrap: [AppComponent]

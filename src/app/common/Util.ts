@@ -27,7 +27,7 @@ export class Util {
 
   static getOrderCategoryItems(order: Map<string, Set<string>>, catalog: Catalog, categoryId: string): Item[] {
     const orderCategoryItemIds = order ? order.get(categoryId, Set()) : Set();
-    const categoryItems = (catalog && catalog.entries.has(categoryId)) ? catalog.entries.get(categoryId).items : [];
+    const categoryItems = (catalog && catalog.entries.has(categoryId)) ? catalog.entries.get(categoryId).items : {};
 
     return <Item[]>_.sortBy(
       _.values(

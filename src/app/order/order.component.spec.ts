@@ -4,7 +4,7 @@ import { OrderComponent } from './order.component';
 import {Component, DebugElement} from '@angular/core';
 import {Category} from '../model/category';
 import {Set, Map} from 'immutable';
-import {MdCardModule, MdIconModule, MdListModule} from '@angular/material';
+import {MatCardModule, MatIconModule, MatListModule} from '@angular/material';
 import {PricePipe} from '../price.pipe';
 import {By} from '@angular/platform-browser';
 import {Util} from '../common/Util';
@@ -105,9 +105,9 @@ describe('OrderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ OrderComponent, TestHostComponent, PricePipe ],
       imports: [
-        MdCardModule,
-        MdIconModule,
-        MdListModule
+        MatCardModule,
+        MatIconModule,
+        MatListModule
       ]
     })
     .compileComponents();
