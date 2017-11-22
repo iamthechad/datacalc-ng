@@ -1,3 +1,7 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=13ad85e8b00e6655fc096fca8f991b69d9fcb1dabd86167471fcae6b9eb6832f
+
 sudo: false
 language: node_js
 addons:
@@ -6,8 +10,16 @@ addons:
 node_js:
 - '6.9'
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
-- ng test && ng lint
+- ng test --code-coverage && ng lint
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   slack:
