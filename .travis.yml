@@ -19,7 +19,7 @@ script:
 - ng test --code-coverage && ng lint
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT || echo “Skipping CC coverage upload”; fi
 
 notifications:
   slack:
