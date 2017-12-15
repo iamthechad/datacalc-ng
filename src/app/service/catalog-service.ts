@@ -15,7 +15,7 @@ import {CategoryRecord} from '../model/category-record';
 @Injectable()
 export class CatalogService {
   private catalogObservable: ReplaySubject<Catalog> = new ReplaySubject();
-  private item: Observable<any[]>;
+  private item: Observable<any>;
 
   constructor(ad: AngularFireDatabase) {
     this.item = ad.object('/catalog').valueChanges();
