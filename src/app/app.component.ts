@@ -62,4 +62,6 @@ export class AppComponent {
   getItemsForCurrentCategory = () => Util.getItemsForCategory(this.catalog, this.selectedCategory);
 
   getOrderItemsForCurrentCategory = () => this.order.get(this.selectedCategory, Set());
+
+  getCurrentCategoryName = () => Util.getCategoryById(this.catalog, this.selectedCategory).name;
 }

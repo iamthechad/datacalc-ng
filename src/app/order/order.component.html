@@ -9,11 +9,6 @@
       </mat-list-item>
     </mat-list>
     <mat-divider></mat-divider>
-    <mat-list>
-      <mat-list-item>
-        <span matLine>Total</span>
-        <span #orderTotalElement matLine class="order-total">{{ orderTotal | price }}</span>
-      </mat-list-item>
-    </mat-list>
+    <mt-order-total [catalog]="catalog" [order]="order"></mt-order-total>
   </mat-card-content>
 </mat-card>

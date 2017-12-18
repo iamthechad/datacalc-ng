@@ -19,6 +19,7 @@ import {OrderComponent} from './order/order.component';
 import {PricePipe} from './price.pipe';
 import {CatalogService} from './service/catalog-service';
 import {OrderService} from './service/order-service';
+import {OrderTotalComponent} from './order/total/order-total.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {OrderService} from './service/order-service';
     CatalogComponent,
     ItemsComponent,
     OrderComponent,
+    OrderTotalComponent,
     PricePipe
   ],
   imports: [

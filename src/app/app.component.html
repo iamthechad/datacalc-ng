@@ -1,14 +1,19 @@
-<div class="wrapper">
-  <mt-header class="header" [title]=title [projectLink]=projectLink></mt-header>
-  <ng-container *ngIf="catalogLoaded">
+<mt-header class="header" [title]=title [projectLink]=projectLink></mt-header>
+<div class="foo" *ngIf="catalogLoaded">
+  <div class="side-nav">Side Nav</div>
+  <div class="wrapper">
+    <div class="menu-container">
+      <button mat-button>{{getCurrentCategoryName()}}</button>
+    </div>
     <mt-catalog class="column-element catalog-nav" [catalog]=catalog [selectedCategory]=selectedCategory
                 (categorySelected)="categorySelected($event)"></mt-catalog>
     <mt-items class="column-element catalog-items" [items]="getItemsForCurrentCategory()"
               [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></mt-items>
     <mt-order class="column-element order" [catalog]=catalog [order]=order
               (itemRemoved)="itemRemoved($event)"></mt-order>
-  </ng-container>
-  <div *ngIf=!catalogLoaded>
-    Loading...
+    <mt-order-total class="order-total-container" [catalog]="catalog" [order]="order"></mt-order-total>
   </div>
+</div>
+<div *ngIf=!catalogLoaded>
+  Loading...
 </div>

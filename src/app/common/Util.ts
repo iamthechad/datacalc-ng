@@ -9,6 +9,14 @@ export class Util {
     return '$' + ( (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') );
   }
 
+  static getCategoryById(catalog: Catalog, categoryId: string): Category {
+    if (catalog && catalog.entries.has(categoryId)) {
+      return catalog.entries.get(categoryId);
+    }
+
+    return null;
+  }
+
   static getItemsForCategory(catalog: Catalog, categoryId: string): Item[] {
     if (catalog && catalog.entries.has(categoryId)) {
       return _.sortBy(_.values(catalog.entries.get(categoryId).items), ['id']);

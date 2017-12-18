@@ -10,6 +10,7 @@ import {By} from '@angular/platform-browser';
 import {Util} from '../common/Util';
 import {Item} from '../model/item';
 import {Catalog} from '../model/catalog';
+import {OrderTotalComponent} from './total/order-total.component';
 
 @Component({
   template: `
@@ -45,10 +46,6 @@ function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, 
       expect(item.nativeElement.textContent).toContain(categoryItem.name);
     });
   });
-}
-
-function verifyTotal(total: DebugElement, expectedTotal: number) {
-  expect(total.nativeElement.textContent).toEqual(Util.formatPrice(expectedTotal));
 }
 
 describe('OrderComponent', () => {
@@ -103,7 +100,7 @@ describe('OrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderComponent, TestHostComponent, PricePipe ],
+      declarations: [ OrderComponent, OrderTotalComponent, TestHostComponent, PricePipe ],
       imports: [
         MatCardModule,
         MatIconModule,
@@ -125,7 +122,6 @@ describe('OrderComponent', () => {
 
   it('should have no items without input', () => {
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), null, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(null, catalog));
   });
 
   it('should have one item', () => {
@@ -137,7 +133,6 @@ describe('OrderComponent', () => {
     fixture.detectChanges();
 
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(order, catalog));
   });
 
   it('should have one item from each category', () => {
@@ -151,7 +146,6 @@ describe('OrderComponent', () => {
     fixture.detectChanges();
 
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(order, catalog));
   });
 
   it('should not fail for invalid category', () => {
@@ -163,7 +157,6 @@ describe('OrderComponent', () => {
     fixture.detectChanges();
 
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(order, catalog));
   });
 
   it('should not fail for invalid item id', () => {
@@ -175,7 +168,6 @@ describe('OrderComponent', () => {
     fixture.detectChanges();
 
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(order, catalog));
   });
 
   it('should send item removed event', () => {
@@ -187,7 +179,6 @@ describe('OrderComponent', () => {
     fixture.detectChanges();
 
     verifyOrder(fixture.debugElement.queryAll(By.css('.order-category')), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css('.order-total')), Util.getOrderTotal(order, catalog));
 
     const removeButton = fixture.debugElement.query(By.css('.item-remove'));
     expect(removeButton).toBeTruthy();
