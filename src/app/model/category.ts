@@ -1,4 +1,4 @@
-import {Item} from './item';
+import {Item} from "./item";
 
 export interface Category {
   readonly id: string;

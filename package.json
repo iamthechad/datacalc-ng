@@ -9,7 +9,7 @@
     "start-open": "ng serve --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint -t verbose",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -54,6 +54,8 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "^5.6.0",
+    "tslint-eslint-rules": "5.1.0",
+    "tslint-sonarts": "^1.6.0",
     "typescript": "2.4.2"
   }
 }

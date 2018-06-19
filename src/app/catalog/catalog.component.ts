@@ -1,12 +1,13 @@
-import {Component, Input, ChangeDetectionStrategy, EventEmitter, Output} from '@angular/core';
-import {Category} from '../model/category';
-import * as _ from 'lodash';
-import {Catalog} from '../model/catalog';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from "@angular/core";
+import {Catalog} from "../model/catalog";
+import {Category} from "../model/category";
+
+import * as _ from "lodash";
 
 @Component({
-  selector: 'mt-catalog',
-  templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.scss'],
+  selector: "mt-catalog",
+  templateUrl: "./catalog.component.html",
+  styleUrls: ["./catalog.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogComponent {
@@ -23,7 +24,7 @@ export class CatalogComponent {
 
   getCategories(): Category[] {
     if (this.catalog) {
-      return _.sortBy(_.values(this.catalog.entries.valueSeq().toArray()), ['id']);
+      return _.sortBy(_.values(this.catalog.entries.valueSeq().toArray()), ["id"]);
     }
 
     return [];

@@ -1,8 +1,8 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import {Util} from './common/Util';
+import { Pipe, PipeTransform } from "@angular/core";
+import {Util} from "./common/Util";
 
 @Pipe({
-  name: 'price'
+  name: "price"
 })
 export class PricePipe implements PipeTransform {
 

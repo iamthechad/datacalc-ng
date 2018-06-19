@@ -7,7 +7,7 @@ addons:
   chrome: stable
 
 node_js:
-- '6.9'
+- '8.9'
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -18,7 +18,7 @@ script:
 - ng test --code-coverage && ng lint
 
 after_script:
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT || echo “Skipping CC coverage upload”; fi
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   slack:
