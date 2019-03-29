@@ -1,9 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/iamthechad/datacalc-ng.png?label=ready&title=Ready)](https://waffle.io/iamthechad/datacalc-ng?utm_source=badge)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c0976b170abb1192aa46/maintainability)](https://codeclimate.com/github/iamthechad/datacalc-ng/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/c0976b170abb1192aa46/test_coverage)](https://codeclimate.com/github/iamthechad/datacalc-ng/test_coverage)
 # DatacalcNg
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.30.
+This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 7.3.7.
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
