@@ -43,7 +43,7 @@ function verifyAndGetUnselectedCategory(fixture: ComponentFixture<TestHostCompon
   return unSelectedCategoryButton;
 }
 
-describe("CatalogComponent", () => {
+describe("CatalogComponent Behavior", () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
@@ -118,4 +118,63 @@ describe("CatalogComponent", () => {
     fixture.detectChanges();
     verifySelectedCategory(fixture, "category 2");
   }));
+});
+
+describe("CatalogComponent Unit", () => {
+  let component: CatalogComponent;
+  let fixture: ComponentFixture<CatalogComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [CatalogComponent],
+      imports: [
+        MatCardModule,
+        MatIconModule,
+        MatListModule
+      ]
+    })
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CatalogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it("should create", () => {
+    expect(component).toBeTruthy();
+  });
+
+  it("should correctly map category icon types", () => {
+    const iconMapping = [
+      {
+        category: "icon-coin-dollar",
+        expectedIcon: "fa-dollar-sign"
+      },
+      {
+        category: "icon-user",
+        expectedIcon: "fa-user"
+      },
+      {
+        category: "icon-library",
+        expectedIcon: "fa-balance-scale"
+      },
+      {
+        category: "icon-profile",
+        expectedIcon: "fa-id-card"
+      },
+      {
+        category: "icon-flag",
+        expectedIcon: "fa-flag"
+      },
+      {
+        category: "foo",
+        expectedIcon: ""
+      }
+    ];
+    iconMapping.forEach(mapping => {
+      expect(mapping.expectedIcon).toEqual(component.translateIcon(mapping.category));
+    });
+  });
 });

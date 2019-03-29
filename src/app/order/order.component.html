@@ -4,7 +4,7 @@
     <mat-list *ngFor="let orderCategory of getOrderCategories()" class="order-category" [attr.data-category-id]="orderCategory.id">
       <mat-list-item class="order-category-name">{{ orderCategory.name }}</mat-list-item>
       <mat-list-item *ngFor="let item of getOrderCategoryItems(orderCategory.id)">
-        <span matLine class="order-item" [attr.data-item-id]="item.id">{{ item.name }}</span><button mat-button (click)="removeItemFromOrder(orderCategory.id, item.id)" class="item-remove"><mat-icon mat-list-icon fontSet="icomoon" fontIcon="icon-cancel-circle"></mat-icon></button>
+        <span matLine class="order-item" [attr.data-item-id]="item.id">{{ item.name }}</span><button mat-button (click)="removeItemFromOrder(orderCategory.id, item.id)" class="item-remove"><mat-icon mat-list-icon fontSet="far" fontIcon="fa-times-circle"></mat-icon></button>
         <span matLine class="order-item-price">{{ item.value | price }}</span>
       </mat-list-item>
     </mat-list>
