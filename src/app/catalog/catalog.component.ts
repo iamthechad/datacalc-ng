@@ -29,4 +29,21 @@ export class CatalogComponent {
 
     return [];
   }
+
+  translateIcon(rawIcon: string): string {
+    switch (rawIcon) {
+      case "icon-coin-dollar":
+        return "fa-dollar-sign";
+      case "icon-user":
+        return "fa-user";
+      case "icon-library":
+        return "fa-balance-scale";
+      case "icon-profile":
+        return "fa-id-card";
+      case "icon-flag":
+        return "fa-flag";
+      default:
+        return "";
+    }
+  }
 }
