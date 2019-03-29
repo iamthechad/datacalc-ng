@@ -1,12 +1,12 @@
-/* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Map} from 'immutable';
-import {By} from '@angular/platform-browser';
-import {Component, DebugElement} from '@angular/core';
+/* tslint:disable:no-unused-variable no-duplicate-string */
+import {Component, DebugElement} from "@angular/core";
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
+import {By} from "@angular/platform-browser";
+import {Map} from "immutable";
 
-import {CatalogComponent} from './catalog.component';
-import {MatCardModule, MatIconModule, MatListModule} from '@angular/material';
-import {Catalog} from '../model/catalog';
+import {Catalog} from "../model/catalog";
+import {CatalogComponent} from "./catalog.component";
 
 @Component({
   template: `
@@ -23,7 +23,7 @@ class TestHostComponent {
 }
 
 function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catalog: Catalog) {
-  const categoryButtons = fixture.debugElement.queryAll(By.css('.catalog-entry'));
+  const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
   expect(categoryButtons.length).toEqual(catalog.entries.valueSeq().size);
   categoryButtons.forEach((button: DebugElement, index: number) => {
     expect(button.nativeElement.textContent).toContain(`category ${index + 1}`);
@@ -31,34 +31,34 @@ function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catal
 }
 
 function verifySelectedCategory(fixture: ComponentFixture<TestHostComponent>, expectedCategoryName: string) {
-  const selectedCategoryButton = fixture.debugElement.query(By.css('.selected'));
+  const selectedCategoryButton = fixture.debugElement.query(By.css(".selected"));
   expect(selectedCategoryButton).toBeTruthy();
   expect(selectedCategoryButton.nativeElement.textContent).toContain(expectedCategoryName);
 }
 
 function verifyAndGetUnselectedCategory(fixture: ComponentFixture<TestHostComponent>, expectedCategoryName: string) {
-  const unSelectedCategoryButton = fixture.debugElement.query(By.css('button:not(.selected)'));
+  const unSelectedCategoryButton = fixture.debugElement.query(By.css("button:not(.selected)"));
   expect(unSelectedCategoryButton).toBeTruthy();
   expect(unSelectedCategoryButton.nativeElement.textContent).toContain(expectedCategoryName);
   return unSelectedCategoryButton;
 }
 
-describe('CatalogComponent', () => {
+describe("CatalogComponent", () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  const catalog = <Catalog>{
+  const catalog: Catalog = {
     entries: Map({
       foo2: {
-        id: 'category2',
-        name: 'category 2',
-        icon: 'category2',
+        id: "category2",
+        name: "category 2",
+        icon: "category2",
         items: {}
       },
       foo1: {
-        id: 'category1',
-        name: 'category 1',
-        icon: 'category1',
+        id: "category1",
+        name: "category 1",
+        icon: "category1",
         items: {}
       }
     })
@@ -82,40 +82,40 @@ describe('CatalogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have no categories without input', () => {
-    const categoryButtons = fixture.debugElement.queryAll(By.css('.catalog-entry'));
+  it("should have no categories without input", () => {
+    const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
     expect(categoryButtons.length).toEqual(0);
   });
 
-  it('should set the catalog with no selected category', () => {
+  it("should set the catalog with no selected category", () => {
     component.catalog = catalog;
     fixture.detectChanges();
     verifyCategoryItems(fixture, catalog);
-    const selectedCategoryButton = fixture.debugElement.query(By.css('.selected'));
+    const selectedCategoryButton = fixture.debugElement.query(By.css(".selected"));
     expect(selectedCategoryButton).not.toBeTruthy();
   });
 
-  it('should set the catalog with selected category', () => {
+  it("should set the catalog with selected category", () => {
     component.catalog = catalog;
-    component.selectedCategory = 'category1';
+    component.selectedCategory = "category1";
     fixture.detectChanges();
     verifyCategoryItems(fixture, catalog);
-    verifySelectedCategory(fixture, 'category 1');
+    verifySelectedCategory(fixture, "category 1");
   });
 
-  it('should set selected category', async(() => {
+  it("should set selected category", async(() => {
     component.catalog = catalog;
-    component.selectedCategory = 'category1';
+    component.selectedCategory = "category1";
     fixture.detectChanges();
     verifyCategoryItems(fixture, catalog);
-    const unSelectedCategoryButton = verifyAndGetUnselectedCategory(fixture, 'category 2');
-    unSelectedCategoryButton.triggerEventHandler('click', 0);
-    expect(component.selectedCategory).toEqual('category2');
+    const unSelectedCategoryButton = verifyAndGetUnselectedCategory(fixture, "category 2");
+    unSelectedCategoryButton.triggerEventHandler("click", 0);
+    expect(component.selectedCategory).toEqual("category2");
     fixture.detectChanges();
-    verifySelectedCategory(fixture, 'category 2');
+    verifySelectedCategory(fixture, "category 2");
   }));
 });

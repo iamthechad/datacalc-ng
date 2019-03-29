@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+/coverage
 
 # dependencies
 /node_modules
@@ -25,11 +26,11 @@
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
 /libpeerconnection.log
 npm-debug.log
 testem.log
 /typings
+package-lock.json
 
 # e2e
 /e2e/*.js

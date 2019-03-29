@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { HeaderComponent } from './header.component';
-import {MatIconModule, MatToolbarModule} from '@angular/material';
+import { HeaderComponent } from "./header.component";
+import {MatIconModule, MatToolbarModule} from "@angular/material";
 
-describe('HeaderComponent', () => {
+describe("HeaderComponent", () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
@@ -13,7 +13,7 @@ describe('HeaderComponent', () => {
       declarations: [ HeaderComponent ],
       imports: [
         MatToolbarModule,
-        MatIconModule,
+        MatIconModule
       ]
     })
     .compileComponents();
@@ -25,21 +25,21 @@ describe('HeaderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should link to specified URL', async(() => {
-    component.projectLink = 'http://www.foo.com/';
+  it("should link to specified URL", async(() => {
+    component.projectLink = "http://www.foo.com/";
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('a.icon-link').href).toEqual('http://www.foo.com/');
+    expect(compiled.querySelector("a.icon-link").href).toEqual("http://www.foo.com/");
   }));
 
-  it('should show expected title', async(() => {
-    component.title = 'Hello World';
+  it("should show expected title", async(() => {
+    component.title = "Hello World";
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toEqual('Hello World');
+    expect(compiled.querySelector("h1").textContent).toEqual("Hello World");
   }));
 });

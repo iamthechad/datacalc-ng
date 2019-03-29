@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy, Component, EventEmitter, Input, Output
-} from '@angular/core';
-import {Item} from '../model/item';
-import {Set} from 'immutable';
+} from "@angular/core";
+import {Item} from "../model/item";
+import {Set} from "immutable";
 
 @Component({
-  selector: 'mt-items',
-  templateUrl: './items.component.html',
-  styleUrls: ['./items.component.scss'],
+  selector: "mt-items",
+  templateUrl: "./items.component.html",
+  styleUrls: ["./items.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemsComponent {

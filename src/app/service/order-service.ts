@@ -1,7 +1,6 @@
-import {Injectable} from '@angular/core';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {Observable} from 'rxjs/Observable';
-import {Set, Map, fromJS, Iterable} from 'immutable';
+import {Injectable} from "@angular/core";
+import {ReplaySubject, Observable} from "rxjs";
+import {Set, Map, fromJS, Iterable} from "immutable";
 import isIndexed = Iterable.isIndexed;
 
 @Injectable()
@@ -9,8 +8,8 @@ export class OrderService {
   private orderObservable: ReplaySubject<Map<string, Set<string>>> = new ReplaySubject();
 
   constructor() {
-    const localStorageRef = localStorage.getItem('order');
-    let order: Map<string, Set<string>> = Map();
+    const localStorageRef = localStorage.getItem("order");
+    let order: Map<string, Set<string>>;
     if (localStorageRef) {
       order = fromJS(JSON.parse(localStorageRef),  (key, value) => isIndexed(value) ? value.toSet() : value.toOrderedMap());
     } else {
@@ -25,9 +24,9 @@ export class OrderService {
 
   storeOrder(order: Map<string, Set<string>>) {
     if (order.isEmpty()) {
-      localStorage.removeItem('order');
+      localStorage.removeItem("order");
     } else {
-      localStorage.setItem('order', JSON.stringify(order.toJS()));
+      localStorage.setItem("order", JSON.stringify(order.toJS()));
     }
   }
 }

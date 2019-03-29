@@ -1,22 +1,22 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {CatalogService} from './service/catalog-service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from "@angular/core";
+import {CatalogService} from "./service/catalog-service";
 
-import {Map, Set} from 'immutable';
-import {OrderService} from './service/order-service';
-import {Util} from './common/Util';
-import {Catalog} from './model/catalog';
+import {Map, Set} from "immutable";
+import {OrderService} from "./service/order-service";
+import {Util} from "./common/Util";
+import {Catalog} from "./model/catalog";
 
 @Component({
-  selector: 'mt-app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: "mt-app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'Data Calculator';
+  title = "Data Calculator";
 
   // I'd rather put this in a config file, but it's not really an issue for now
-  projectLink = 'https://github.com/iamthechad/datacalc-ng';
+  projectLink = "https://github.com/iamthechad/datacalc-ng";
 
   catalog: Catalog;
   order: Map<string, Set<string>>;
