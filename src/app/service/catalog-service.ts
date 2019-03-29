@@ -1,7 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ReplaySubject} from "rxjs/ReplaySubject";
-import {Observable} from "rxjs/Observable";
-import {AngularFireDatabase} from "angularfire2/database";
+import {ReplaySubject, Observable} from "rxjs";
 import {Category} from "../model/category";
 import {Catalog} from "../model/catalog";
 import {Item} from "../model/item";
@@ -11,6 +9,7 @@ import * as _ from "lodash";
 import {recordify} from "typed-immutable-record";
 import {ItemRecord} from "../model/item-record";
 import {CategoryRecord} from "../model/category-record";
+import {AngularFireDatabase} from "@angular/fire/database";
 
 @Injectable()
 export class CatalogService {

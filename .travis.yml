@@ -2,6 +2,7 @@ env:
   global:
     - CC_TEST_REPORTER_ID=13ad85e8b00e6655fc096fca8f991b69d9fcb1dabd86167471fcae6b9eb6832f
 
+sudo: required
 language: node_js
 addons:
   chrome: stable

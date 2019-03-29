@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ReplaySubject} from "rxjs/ReplaySubject";
-import {Observable} from "rxjs/Observable";
+import {ReplaySubject, Observable} from "rxjs";
 import {Set, Map, fromJS, Iterable} from "immutable";
 import isIndexed = Iterable.isIndexed;
 
