@@ -1,9 +1,11 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=13ad85e8b00e6655fc096fca8f991b69d9fcb1dabd86167471fcae6b9eb6832f
+  - CC_TEST_REPORTER_ID=13ad85e8b00e6655fc096fca8f991b69d9fcb1dabd86167471fcae6b9eb6832f
 
 sudo: required
+
 language: node_js
+
 addons:
   chrome: stable
 
@@ -11,15 +13,36 @@ node_js:
 - '8.9'
 
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-
-script:
-- ng test --code-coverage && ng lint
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+
+jobs:
+  include:
+  - stage: Test
+    script: npm run lint && npm run test -- --code-coverage
+  - stage: Production build
+    script: npm run build:prod
+    if: branch = master AND type != pull_request
+  - stage: S3 Deploy
+    script: echo "Deploying to S3"
+    if: branch = master AND type != pull_request
+    deploy:
+      provider: s3
+      access_key_id: AKIAWXGBVQDYE7TBBB7O
+      secret_access_key:
+        secure: m+MEuLZ709G1YYwZS+PhL42/FGAgnCDqk9fWjedwKHsbRtlB+4ACMITnh+fu+Hs1cArFgNpAPuVd5SeRU+hbjtCRZdmJZGkpxFNXosnlwpfPL7ByraLUtZnUZGFKhSrvZA+LBL0H1PjAnI4go5LUy/pIWs3a7PPb8J5iJw2/dkc6eSnmMBa0lqu1vhawgFP+sQnrQ5F2Gw82H4fHe4vntZQIODNmreylaU8N7/j+dsz/0eGSVB8bgjaqEFAHRLK77vFwRg+NVvr7/Mf9WH5j+sBTsSVs/V/9Sl3f3VIijW86GWNg+oOG8BhyNbfg8+sqKHyofBKhLlr7+qO7c5cvWIwiUpfk73N/zmZXCACBZ+vlvxAPUYEappgjQ7XeH+81Wj3NjT0UijPN6t2igS8xMXYm+v5doR+VHJwMdY7D1FkUfByHO1+X+GrvLjIYRzKjcFCuMy1TvX8fEvZJl4Hr+RXIYuNlWfYkrYW//X70aX11CPchiGNADI+50LnKup325+xbuFaCKslccJGqSsrSxPoB+2yiVIt/1pLNmLVQjs7J97JK2QjXCf9jqT0kwYXRdIIPUOdOffebxCWZaqBWA3RJ1+qSfw6f+hnj9jrqws88BTmKEjXwSDvpFP61/2xBcNG4opoT9X9RtG7mhRSUb04vnbWhF3ZPCljcmRYyjPw=
+      bucket: iamthechad.com
+      local-dir: dist
+      upload-dir: datacalc-ng
+      acl: public_read
+      on:
+        repo: iamthechad/datacalc-ng
+        branch: master
 
 notifications:
   slack:
