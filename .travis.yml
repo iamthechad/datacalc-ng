@@ -1,41 +1,32 @@
 env:
   global:
   - CC_TEST_REPORTER_ID=13ad85e8b00e6655fc096fca8f991b69d9fcb1dabd86167471fcae6b9eb6832f
-
 sudo: required
-
 language: node_js
-
 addons:
   chrome: stable
-
 node_js:
 - '8.9'
-
-before_script:
-- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-  > ./cc-test-reporter
-- chmod +x ./cc-test-reporter
-- "./cc-test-reporter before-build"
-
-after_script:
-- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
-
 jobs:
   include:
   - stage: Test
+    before_script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+      > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - "./cc-test-reporter before-build"
     script: npm run lint && npm run test -- --code-coverage
-  - stage: Production build
-    script: npm run build:prod
-    if: branch = master AND type != pull_request
+    after_script:
+    - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
   - stage: S3 Deploy
-    script: echo "Deploying to S3"
+    script: npm run build:prod
     if: branch = master AND type != pull_request
     deploy:
       provider: s3
-      access_key_id: AKIAWXGBVQDYE7TBBB7O
       secret_access_key:
-        secure: m+MEuLZ709G1YYwZS+PhL42/FGAgnCDqk9fWjedwKHsbRtlB+4ACMITnh+fu+Hs1cArFgNpAPuVd5SeRU+hbjtCRZdmJZGkpxFNXosnlwpfPL7ByraLUtZnUZGFKhSrvZA+LBL0H1PjAnI4go5LUy/pIWs3a7PPb8J5iJw2/dkc6eSnmMBa0lqu1vhawgFP+sQnrQ5F2Gw82H4fHe4vntZQIODNmreylaU8N7/j+dsz/0eGSVB8bgjaqEFAHRLK77vFwRg+NVvr7/Mf9WH5j+sBTsSVs/V/9Sl3f3VIijW86GWNg+oOG8BhyNbfg8+sqKHyofBKhLlr7+qO7c5cvWIwiUpfk73N/zmZXCACBZ+vlvxAPUYEappgjQ7XeH+81Wj3NjT0UijPN6t2igS8xMXYm+v5doR+VHJwMdY7D1FkUfByHO1+X+GrvLjIYRzKjcFCuMy1TvX8fEvZJl4Hr+RXIYuNlWfYkrYW//X70aX11CPchiGNADI+50LnKup325+xbuFaCKslccJGqSsrSxPoB+2yiVIt/1pLNmLVQjs7J97JK2QjXCf9jqT0kwYXRdIIPUOdOffebxCWZaqBWA3RJ1+qSfw6f+hnj9jrqws88BTmKEjXwSDvpFP61/2xBcNG4opoT9X9RtG7mhRSUb04vnbWhF3ZPCljcmRYyjPw=
+        secure: fh/vPytwQ2BEHI2AkoczlEq2ncPgT14/XUCN5mrTt5CI+UOp/Ec1NN8S2nHGpopXWInSJfocXynJ0j+Sx8LIY7R6S5IV/a3Yb3oEVgMeJdxHaFscVioyEvl846u6SKa+jVsNO+Ikxf1RSSm1vo/Il/HPPPTdOHl0eqTXHb62FfHVD27fosf5GR8KrQixi4MaInSU+sKCOnHhxcDOup+w7o9NnDzyLZCFcZIscwLk28ySeb1q+39o0T8EwSR1aBC4q20iXLgO6yhJV8YmGtzdQ2D5dejz6+KjVC3AeqWZq5Yi3h9YKjVY4FY/AAzBM4qYmHFP4sw4uwkhFNgtVcq2ebSYR8CK4fQ+sczr4byRz5mTic3hwDyi43oooblgtoBP95VgAPHvZZ+eKxjKItfKEKSExfmRRmZVL9aJkC0EPjzXG0AFkw98yIX3C9+mZywFLx+U1rz7q8JXz+Oiwi8ElvJ0Y/AhDQxSG0FilUGxaMODxV75keTvz4+qWbGlGYjhyHzJadQbS1ux094iWHQQYsW1esgQADOOG2h8nLl59clPV54z3BSRQD/mPHw2C8GsUPMvT2wno00wcuQfyQ9Gh4nCYwoGflMJSy+jKj/lzyDzzNkMR4iXo9Gcpz5boqjGFK0FfJP7uzNtpOaAZ5n7HrCeZQnMtOPPrGaETh54BQ4=
+      access_key_id:
+        secure: eLV3ItvxGLRk4qDD6/Q4Zd0iAk0E/kVo/igEN0rsOdFQXTcAO+Aiam5yDUbRBRILVD6tqTAFGS93VH+6qf2yfuZxKIWvFYyVux/ui1alewf5XwRWKK0PQIQYoUUdqdBnjfpm2k4Ld41VG77mwG3tBu0zlJBaR6rklEA9FdyAUdEyLDXNUFGImkQXXi4zssXoNV2z1aX80lVECh4IroAtq5+CsvSzmITUbaCYrd65h3VskRXQfm6ox67bIt+PU/ppOsnKLqEhiZSXpdqK11vh2YZfIpVG8ch32GUfMhm92LyxPRa2JBYeGxDZYQ6JJb2Kx72qGeleVKMPqY8RTCQpJzYDJbx0P/84ch2+OwHW7zFP0H6/tfUbxqi2yit7CxcaqMGnukE9JbGK2KYlFTaaDK77PZopCu1Mhj/DkyrPIBzrCwnzaSk89Pcr41l5En7h1JQeo2YQ5gBJYVec0CzRUdcCq0qgNQJKb5Cbsx7aEurIXM5vKjZr19ZPf5VAeFS/WixcDcTKp+y8adkKh/sY0BwtGIAgQBUWy1DBdXgRDKM0VfqitHl2MfUIPvtlqkxokkUzw/ha7hND3QyQknCJoIC7Mi9TnHGhb7B9yAQ5r7I2c/LEUrDim+zKIdcIRpvDzeehSAtS6UKJPyWO/LDV1QsA2JZY1jIt0ytoJ3WbI9c=
       bucket: iamthechad.com
       local-dir: dist
       upload-dir: datacalc-ng
@@ -43,7 +34,6 @@ jobs:
       on:
         repo: iamthechad/datacalc-ng
         branch: master
-
 notifications:
   slack:
     secure: JDagsb2MGcm9LReT4vZGsuGyf7EkbK4y6m3PKrrr+wqzJUG+5AZ9CGDTn7dGhoyOHGSFonNiaUceSIwVXz8z8/RaIpnRs/bvoUg2fwbdyO0EnK8oeFjQ6ma4O+iJN3iuEHsRUigbCE+9vWIiD3RNznSUjiLVDLB4jgZFBvEbP3zoqQ1xra3HCuBlBywfLPEoQhiFmD1zSbYiOm1Y/P2Ady3Pl9tYtSY/fjeTuY+Y75thjjNNA0bIMh4fdZNTvee3QliM51QD7Dz522a2UvXHF3mBgKBtIhhfflFBJPr8Gcbx73Osi7p5JymOFRP3RMh4tA6a2xzPMHCbtUrNApxJ7kRvAM/4NEvaysIoU+QdEVw48RqgNej4eYOI15vty4fcEt1aEdS2FvfCG8JoHCXF7U4Dhr/zjT3abREbN47ex9m24LbOjBMRZkzsh+YI7VVcW3q1NiqnhDEPHAyjNGrn2gnzeXLKMovQqbwRpYeNOw4f5MNHYNvhxlCMK+kCqFOzVCfJm4UHJyHkss1wqykuSGG+05g+eu9cKmIAskPvq9stiQKWyQMFuvV3AASwVx3UH9LlmOcQWuf/5VeV049H/bLjUVber51pKO+pIvhgNjfBNrZs80fI+kkW5PoD6zJ7QjqWGplJjdtNP2bbDOfQnyYotuCjbdhydsPnn3TJSqw=
