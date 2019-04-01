@@ -23,6 +23,7 @@ jobs:
     if: branch = master AND type != pull_request
     deploy:
       provider: s3
+      skip_cleanup: true
       secret_access_key:
         secure: fh/vPytwQ2BEHI2AkoczlEq2ncPgT14/XUCN5mrTt5CI+UOp/Ec1NN8S2nHGpopXWInSJfocXynJ0j+Sx8LIY7R6S5IV/a3Yb3oEVgMeJdxHaFscVioyEvl846u6SKa+jVsNO+Ikxf1RSSm1vo/Il/HPPPTdOHl0eqTXHb62FfHVD27fosf5GR8KrQixi4MaInSU+sKCOnHhxcDOup+w7o9NnDzyLZCFcZIscwLk28ySeb1q+39o0T8EwSR1aBC4q20iXLgO6yhJV8YmGtzdQ2D5dejz6+KjVC3AeqWZq5Yi3h9YKjVY4FY/AAzBM4qYmHFP4sw4uwkhFNgtVcq2ebSYR8CK4fQ+sczr4byRz5mTic3hwDyi43oooblgtoBP95VgAPHvZZ+eKxjKItfKEKSExfmRRmZVL9aJkC0EPjzXG0AFkw98yIX3C9+mZywFLx+U1rz7q8JXz+Oiwi8ElvJ0Y/AhDQxSG0FilUGxaMODxV75keTvz4+qWbGlGYjhyHzJadQbS1ux094iWHQQYsW1esgQADOOG2h8nLl59clPV54z3BSRQD/mPHw2C8GsUPMvT2wno00wcuQfyQ9Gh4nCYwoGflMJSy+jKj/lzyDzzNkMR4iXo9Gcpz5boqjGFK0FfJP7uzNtpOaAZ5n7HrCeZQnMtOPPrGaETh54BQ4=
       access_key_id:
