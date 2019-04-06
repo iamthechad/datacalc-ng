@@ -1,14 +1,15 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output,
-  SimpleChanges, ViewChild
+  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild
 } from "@angular/core";
 import {Category} from "../model/category";
 
 import {Item} from "../model/item";
-import {Set, Map} from "immutable";
 import {Util} from "../common/Util";
 import {Catalog} from "../model/catalog";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
+import {OrderService} from "../service/order-service";
+import {Set, Map} from "immutable";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: "mt-order",
@@ -16,25 +17,33 @@ import {BehaviorSubject} from "rxjs";
   styleUrls: ["./order.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrderComponent implements OnChanges {
+export class OrderComponent implements OnDestroy {
   @Input() catalog: Catalog;
-
-  @Input() order: Map<string, Set<string>>;
-
-  @Output() itemRemoved = new EventEmitter<{ categoryId: string, itemId: string }>();
 
   @ViewChild("orderTotalElement") orderTotalElement: ElementRef;
 
   orderTotal = new BehaviorSubject<number>(0);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const orderValue = changes.hasOwnProperty("order") ? changes.order.currentValue : this.order;
-    const catalogValue = changes.hasOwnProperty("catalog") ? changes.catalog.currentValue : this.catalog;
-    this.orderTotal.next(Util.getOrderTotal(orderValue, catalogValue));
+  order: Map<string, Set<string>>;
+
+  private onDestroy = new Subject<void>();
+
+  constructor(private orderService: OrderService) {
+    this.orderService.getOrderObservable().pipe(
+      takeUntil(this.onDestroy)
+    ).subscribe(order => {
+      this.order = order;
+      this.orderTotal.next(Util.getOrderTotal(order, this.catalog));
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.complete();
   }
 
   removeItemFromOrder(categoryId: string, itemId: string) {
-    this.itemRemoved.emit({ categoryId, itemId });
+    this.orderService.removeItem(itemId, categoryId);
   }
 
   getOrderCategories = (): Category[] => Util.getCategoriesForOrder(this.order, this.catalog);

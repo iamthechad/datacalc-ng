@@ -1,5 +1,5 @@
 /* tslint:disable:no-duplicate-string */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from "@angular/core/testing";
 
 import { OrderComponent } from "./order.component";
 import {Component, DebugElement} from "@angular/core";
@@ -11,17 +11,16 @@ import {By} from "@angular/platform-browser";
 import {Util} from "../common/Util";
 import {Item} from "../model/item";
 import {Catalog} from "../model/catalog";
+import {OrderService} from "../service/order-service";
 
 @Component({
   template: `
-    <mt-order [catalog]=catalog [order]=order (itemRemoved)="itemRemoved($event)"></mt-order>
+    <mt-order [catalog]=catalog></mt-order>
     `
 })
 class TestHostComponent {
   catalog: Catalog;
   order: Map<string, Set<string>>;
-  selectedItem: string;
-  itemRemoved(itemId: string) { this.selectedItem = itemId; }
 }
 
 function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Catalog) {
@@ -52,9 +51,25 @@ function verifyTotal(total: DebugElement, expectedTotal: number) {
   expect(total.nativeElement.textContent).toEqual(Util.formatPrice(expectedTotal));
 }
 
+function verifyOrderObject(expectedOrder: Map<string, Set<string>>, actualOrder: Map<string, Set<string>>) {
+  expect(expectedOrder).toBeTruthy();
+  expect(actualOrder).toBeTruthy();
+  expectedOrder.keySeq().toArray().forEach(value => {
+    expect(actualOrder.has(value)).toBeTruthy();
+    const expectedItems = expectedOrder.get(value);
+    const actualItems = actualOrder.get(value);
+    expect(expectedItems.size).toEqual(actualItems.size);
+    expectedItems.toArray().forEach(item => {
+      expect(actualItems.contains(item)).toBeTruthy();
+    });
+  });
+}
+
+/* tslint:disable-next-line:no-big-function */
 describe("OrderComponent", () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
+  let orderService: OrderService;
 
   const catalog: Catalog = { entries: Map({
     category2: {
@@ -109,12 +124,15 @@ describe("OrderComponent", () => {
         MatCardModule,
         MatIconModule,
         MatListModule
-      ]
+      ],
+      providers: [ OrderService ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
+    orderService = TestBed.get(OrderService);
+    orderService.clearOrder();
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -129,71 +147,151 @@ describe("OrderComponent", () => {
     verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(null, catalog));
   });
 
-  it("should have one item", () => {
-    const order = Map({
+  it("should have one item", fakeAsync(() => {
+    const expectedOrder = Map({
       category1: Set(["item11"])
     });
     component.catalog = catalog;
-    component.order = order;
     fixture.detectChanges();
+    orderService.addItem("item11", "category1");
+    tick();
+    fixture.detectChanges();
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+  }));
 
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(order, catalog));
-  });
-
-  it("should have one item from each category", () => {
-    const order = Map({
+  it("should have one item from each category", fakeAsync(() => {
+    const expectedOrder = Map({
       category1: Set(["item11"]),
       category2: Set(["item22"])
     });
 
     component.catalog = catalog;
-    component.order = order;
+    fixture.detectChanges();
+    orderService.addItem("item11", "category1");
+    orderService.addItem("item22", "category2");
+    tick();
     fixture.detectChanges();
 
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(order, catalog));
-  });
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+  }));
 
-  it("should not fail for invalid category", () => {
-    const order = Map({
+  it("should not fail for invalid category", fakeAsync(() => {
+    const expectedOrder = Map({
       foo1: Set(["item11"])
     });
     component.catalog = catalog;
-    component.order = order;
+    fixture.detectChanges();
+    orderService.addItem("item11", "foo1");
+    tick();
     fixture.detectChanges();
 
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(order, catalog));
-  });
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+  }));
 
   /* tslint:disable-next-line:no-identical-functions */
-  it("should not fail for invalid item id", () => {
-    const order = Map({
+  it("should not fail for invalid item id", fakeAsync(() => {
+    const expectedOrder = Map({
       category1: Set(["itemXX"])
     });
     component.catalog = catalog;
-    component.order = order;
+    fixture.detectChanges();
+    orderService.addItem("itemXX", "category1");
+    tick();
     fixture.detectChanges();
 
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(order, catalog));
-  });
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+  }));
 
-  it("should send item removed event", () => {
-    const order = Map({
+  it("should remove the only item", fakeAsync(() => {
+    const expectedOrder = Map({
       category1: Set(["item11"])
     });
     component.catalog = catalog;
-    component.order = order;
+    fixture.detectChanges();
+    orderService.addItem("item11", "category1");
+    tick();
     fixture.detectChanges();
 
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), order, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(order, catalog));
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
 
     const removeButton = fixture.debugElement.query(By.css(".item-remove"));
     expect(removeButton).toBeTruthy();
     removeButton.triggerEventHandler("click", 0);
-    expect(component.selectedItem).toEqual({ categoryId: "category1", itemId: "item11" });
-  });
+    tick();
+    fixture.detectChanges();
+
+    const emptyOrder: Map<string, Set<string>> = Map();
+    verifyOrderObject(emptyOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), emptyOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(emptyOrder, catalog));
+  }));
+
+  it("should remove the only item from a category and that category", fakeAsync(() => {
+    const expectedOrder = Map({
+      category1: Set(["item11"]),
+      category2: Set(["item22"])
+    });
+    component.catalog = catalog;
+    fixture.detectChanges();
+    orderService.addItem("item11", "category1");
+    orderService.addItem("item22", "category2");
+    tick();
+    fixture.detectChanges();
+
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+
+    const removeButton = fixture.debugElement.query(By.css(".item-remove"));
+    expect(removeButton).toBeTruthy();
+    removeButton.triggerEventHandler("click", 0);
+    tick();
+    fixture.detectChanges();
+
+    const updatedOrder = Map({
+      category2: Set(["item22"])
+    });
+    verifyOrderObject(updatedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), updatedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(updatedOrder, catalog));
+  }));
+
+  it("should remove a single item from a category", fakeAsync(() => {
+    const expectedOrder = Map({
+      category1: Set(["item11", "item12"])
+    });
+    component.catalog = catalog;
+    fixture.detectChanges();
+    orderService.addItem("item11", "category1");
+    orderService.addItem("item12", "category1");
+    tick();
+    fixture.detectChanges();
+
+    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+
+    const removeButton = fixture.debugElement.query(By.css(".item-remove"));
+    expect(removeButton).toBeTruthy();
+    removeButton.triggerEventHandler("click", 0);
+    tick();
+    fixture.detectChanges();
+
+    const updatedOrder = Map({
+      category1: Set(["item12"])
+    });
+    verifyOrderObject(updatedOrder, orderService.getCurrentOrder());
+    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), updatedOrder, catalog);
+    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(updatedOrder, catalog));
+  }));
 });
