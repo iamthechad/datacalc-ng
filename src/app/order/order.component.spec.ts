@@ -51,21 +51,11 @@ function verifyTotal(total: DebugElement, expectedTotal: number) {
   expect(total.nativeElement.textContent).toEqual(Util.formatPrice(expectedTotal));
 }
 
-function verifyOrderObject(expectedOrder: Map<string, Set<string>>, actualOrder: Map<string, Set<string>>) {
-  expect(expectedOrder).toBeTruthy();
-  expect(actualOrder).toBeTruthy();
-  expectedOrder.keySeq().toArray().forEach(value => {
-    expect(actualOrder.has(value)).toBeTruthy();
-    const expectedItems = expectedOrder.get(value);
-    const actualItems = actualOrder.get(value);
-    expect(expectedItems.size).toEqual(actualItems.size);
-    expectedItems.toArray().forEach(item => {
-      expect(actualItems.contains(item)).toBeTruthy();
-    });
-  });
+function verifyOrderAndTotal(debugElement: DebugElement, expectedOrder: Map<string, Set<string>>, catalog: Catalog) {
+  verifyOrder(debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
+  verifyTotal(debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
 }
 
-/* tslint:disable-next-line:no-big-function */
 describe("OrderComponent", () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
@@ -143,22 +133,17 @@ describe("OrderComponent", () => {
   });
 
   it("should have no items without input", () => {
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), null, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(null, catalog));
+    verifyOrderAndTotal(fixture.debugElement, null, catalog);
   });
 
   it("should have one item", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["item11"])
-    });
+    const expectedOrder = Map({ category1: Set(["item11"]) });
     component.catalog = catalog;
     fixture.detectChanges();
     orderService.addItem("item11", "category1");
     tick();
     fixture.detectChanges();
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
   }));
 
   it("should have one item from each category", fakeAsync(() => {
@@ -174,55 +159,41 @@ describe("OrderComponent", () => {
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
   }));
 
   it("should not fail for invalid category", fakeAsync(() => {
-    const expectedOrder = Map({
-      foo1: Set(["item11"])
-    });
+    const expectedOrder = Map({ foo1: Set(["item11"]) });
     component.catalog = catalog;
     fixture.detectChanges();
     orderService.addItem("item11", "foo1");
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
   }));
 
   /* tslint:disable-next-line:no-identical-functions */
   it("should not fail for invalid item id", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["itemXX"])
-    });
+    const expectedOrder = Map({ category1: Set(["itemXX"]) });
     component.catalog = catalog;
     fixture.detectChanges();
     orderService.addItem("itemXX", "category1");
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
   }));
 
   it("should remove the only item", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["item11"])
-    });
+    const expectedOrder = Map({ category1: Set(["item11"]) });
     component.catalog = catalog;
     fixture.detectChanges();
     orderService.addItem("item11", "category1");
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
 
     const removeButton = fixture.debugElement.query(By.css(".item-remove"));
     expect(removeButton).toBeTruthy();
@@ -231,9 +202,7 @@ describe("OrderComponent", () => {
     fixture.detectChanges();
 
     const emptyOrder: Map<string, Set<string>> = Map();
-    verifyOrderObject(emptyOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), emptyOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(emptyOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, emptyOrder, catalog);
   }));
 
   it("should remove the only item from a category and that category", fakeAsync(() => {
@@ -248,9 +217,7 @@ describe("OrderComponent", () => {
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
 
     const removeButton = fixture.debugElement.query(By.css(".item-remove"));
     expect(removeButton).toBeTruthy();
@@ -258,18 +225,12 @@ describe("OrderComponent", () => {
     tick();
     fixture.detectChanges();
 
-    const updatedOrder = Map({
-      category2: Set(["item22"])
-    });
-    verifyOrderObject(updatedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), updatedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(updatedOrder, catalog));
+    const updatedOrder = Map({ category2: Set(["item22"]) });
+    verifyOrderAndTotal(fixture.debugElement, updatedOrder, catalog);
   }));
 
   it("should remove a single item from a category", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["item11", "item12"])
-    });
+    const expectedOrder = Map({ category1: Set(["item11", "item12"]) });
     component.catalog = catalog;
     fixture.detectChanges();
     orderService.addItem("item11", "category1");
@@ -277,9 +238,7 @@ describe("OrderComponent", () => {
     tick();
     fixture.detectChanges();
 
-    verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
+    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
 
     const removeButton = fixture.debugElement.query(By.css(".item-remove"));
     expect(removeButton).toBeTruthy();
@@ -287,11 +246,7 @@ describe("OrderComponent", () => {
     tick();
     fixture.detectChanges();
 
-    const updatedOrder = Map({
-      category1: Set(["item12"])
-    });
-    verifyOrderObject(updatedOrder, orderService.getCurrentOrder());
-    verifyOrder(fixture.debugElement.queryAll(By.css(".order-category")), updatedOrder, catalog);
-    verifyTotal(fixture.debugElement.query(By.css(".order-total")), Util.getOrderTotal(updatedOrder, catalog));
+    const updatedOrder = Map({ category1: Set(["item12"]) });
+    verifyOrderAndTotal(fixture.debugElement, updatedOrder, catalog);
   }));
 });

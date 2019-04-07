@@ -6,7 +6,7 @@ import isIndexed = Iterable.isIndexed;
 @Injectable()
 export class OrderService {
   private currentOrder: Map<string, Set<string>>;
-  private orderObservable: ReplaySubject<Map<string, Set<string>>> = new ReplaySubject();
+  private orderObservable: ReplaySubject<Map<string, Set<string>>> = new ReplaySubject(1);
 
   constructor() {
     const localStorageRef = localStorage.getItem("order");
