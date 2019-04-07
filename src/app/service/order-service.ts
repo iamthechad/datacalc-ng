@@ -5,28 +5,62 @@ import isIndexed = Iterable.isIndexed;
 
 @Injectable()
 export class OrderService {
+  private currentOrder: Map<string, Set<string>>;
   private orderObservable: ReplaySubject<Map<string, Set<string>>> = new ReplaySubject();
 
   constructor() {
     const localStorageRef = localStorage.getItem("order");
-    let order: Map<string, Set<string>>;
     if (localStorageRef) {
-      order = fromJS(JSON.parse(localStorageRef),  (key, value) => isIndexed(value) ? value.toSet() : value.toOrderedMap());
+      this.currentOrder = fromJS(JSON.parse(localStorageRef),  (key, value) => isIndexed(value) ? value.toSet() : value.toOrderedMap());
     } else {
-      order = Map();
+      this.currentOrder = Map();
     }
-    this.orderObservable.next(order);
+    this.orderObservable.next(this.currentOrder);
   }
 
   getOrderObservable(): Observable<Map<string, Set<string>>> {
     return this.orderObservable.asObservable();
   }
 
-  storeOrder(order: Map<string, Set<string>>) {
-    if (order.isEmpty()) {
+  getCurrentOrder(): Map<string, Set<string>> {
+    return this.currentOrder;
+  }
+
+  addItem(itemId: string, categoryId: string): void {
+    this.currentOrder = this.currentOrder.set(categoryId, this.currentOrder.get(categoryId, Set()).add(itemId));
+    this.storeOrder();
+    this.orderObservable.next(this.currentOrder);
+  }
+
+  removeItem(itemId: string, categoryId: string): void {
+    let categoryItems = this.currentOrder.get(categoryId, Set());
+    if (categoryItems.has(itemId)) {
+      categoryItems = categoryItems.delete(itemId);
+      if (categoryItems.isEmpty()) {
+        this.currentOrder = this.currentOrder.delete(categoryId);
+      } else {
+        this.currentOrder = this.currentOrder.set(categoryId, categoryItems);
+      }
+    }
+    this.storeOrder();
+    this.orderObservable.next(this.currentOrder);
+  }
+
+  getItemsForCategory(categoryId: string): Set<string> {
+    return this.currentOrder.get(categoryId, Set());
+  }
+
+  clearOrder(): void {
+    this.currentOrder = Map();
+    this.storeOrder();
+    this.orderObservable.next(this.currentOrder);
+  }
+
+  private storeOrder() {
+    if (this.currentOrder.isEmpty()) {
       localStorage.removeItem("order");
     } else {
-      localStorage.setItem("order", JSON.stringify(order.toJS()));
+      localStorage.setItem("order", JSON.stringify(this.currentOrder.toJS()));
     }
   }
 }
