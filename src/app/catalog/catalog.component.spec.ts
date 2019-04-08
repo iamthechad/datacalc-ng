@@ -7,14 +7,16 @@ import {Map} from "immutable";
 
 import {Catalog} from "../model/catalog";
 import {CatalogComponent} from "./catalog.component";
+import {CatalogLoaderToken} from "../model/catalog-loader";
+import {TestCatalogLoaderService} from "../test/service/test-catalog-loader.service";
+import {CatalogService} from "../service/catalog-service";
 
 @Component({
   template: `
-    <mt-catalog [catalog]=catalog [selectedCategory]=selectedCategory
+    <mt-catalog [selectedCategory]=selectedCategory
                 (categorySelected)="categorySelected($event)"></mt-catalog>`
 })
 class TestHostComponent {
-  catalog: Catalog;
   selectedCategory: string;
 
   categorySelected(categoryId: string) {
@@ -46,23 +48,7 @@ function verifyAndGetUnselectedCategory(fixture: ComponentFixture<TestHostCompon
 describe("CatalogComponent Behavior", () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-
-  const catalog: Catalog = {
-    entries: Map({
-      foo2: {
-        id: "category2",
-        name: "category 2",
-        icon: "category2",
-        items: {}
-      },
-      foo1: {
-        id: "category1",
-        name: "category 1",
-        icon: "category1",
-        items: {}
-      }
-    })
-  };
+  let catalogService: CatalogService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -71,12 +57,17 @@ describe("CatalogComponent Behavior", () => {
         MatCardModule,
         MatIconModule,
         MatListModule
+      ],
+      providers: [
+        CatalogService,
+        { provide: CatalogLoaderToken, useClass: TestCatalogLoaderService }
       ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
+    catalogService = TestBed.get(CatalogService);
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -86,32 +77,24 @@ describe("CatalogComponent Behavior", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should have no categories without input", () => {
-    const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
-    expect(categoryButtons.length).toEqual(0);
-  });
-
   it("should set the catalog with no selected category", () => {
-    component.catalog = catalog;
     fixture.detectChanges();
-    verifyCategoryItems(fixture, catalog);
+    verifyCategoryItems(fixture, TestCatalogLoaderService.getTestCatalog());
     const selectedCategoryButton = fixture.debugElement.query(By.css(".selected"));
     expect(selectedCategoryButton).not.toBeTruthy();
   });
 
   it("should set the catalog with selected category", () => {
-    component.catalog = catalog;
     component.selectedCategory = "category1";
     fixture.detectChanges();
-    verifyCategoryItems(fixture, catalog);
+    verifyCategoryItems(fixture, TestCatalogLoaderService.getTestCatalog());
     verifySelectedCategory(fixture, "category 1");
   });
 
   it("should set selected category", async(() => {
-    component.catalog = catalog;
     component.selectedCategory = "category1";
     fixture.detectChanges();
-    verifyCategoryItems(fixture, catalog);
+    verifyCategoryItems(fixture, TestCatalogLoaderService.getTestCatalog());
     const unSelectedCategoryButton = verifyAndGetUnselectedCategory(fixture, "category 2");
     unSelectedCategoryButton.triggerEventHandler("click", 0);
     expect(component.selectedCategory).toEqual("category2");
@@ -131,6 +114,10 @@ describe("CatalogComponent Unit", () => {
         MatCardModule,
         MatIconModule,
         MatListModule
+      ],
+      providers: [
+        CatalogService,
+        { provide: CatalogLoaderToken, useClass: TestCatalogLoaderService }
       ]
     })
       .compileComponents();

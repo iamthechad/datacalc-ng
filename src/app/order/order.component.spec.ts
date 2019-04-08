@@ -1,8 +1,7 @@
-/* tslint:disable:no-duplicate-string */
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from "@angular/core/testing";
 
 import { OrderComponent } from "./order.component";
-import {Component, DebugElement} from "@angular/core";
+import {DebugElement} from "@angular/core";
 import {Category} from "../model/category";
 import {Set, Map} from "immutable";
 import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
@@ -12,16 +11,9 @@ import {Util} from "../common/Util";
 import {Item} from "../model/item";
 import {Catalog} from "../model/catalog";
 import {OrderService} from "../service/order-service";
-
-@Component({
-  template: `
-    <mt-order [catalog]=catalog></mt-order>
-    `
-})
-class TestHostComponent {
-  catalog: Catalog;
-  order: Map<string, Set<string>>;
-}
+import {CatalogService} from "../service/catalog-service";
+import {CatalogLoaderToken} from "../model/catalog-loader";
+import {TestCatalogLoaderService} from "../test/service/test-catalog-loader.service";
 
 function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Catalog) {
   const expectedCategories = Util.getCategoriesForOrder(order, catalog);
@@ -56,66 +48,43 @@ function verifyOrderAndTotal(debugElement: DebugElement, expectedOrder: Map<stri
   verifyTotal(debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
 }
 
-describe("OrderComponent", () => {
-  let component: TestHostComponent;
-  let fixture: ComponentFixture<TestHostComponent>;
-  let orderService: OrderService;
+function applyOrderAndVerify(expectedOrder: Map<string, Set<string>>, fixture: ComponentFixture<OrderComponent>, orderService: OrderService) {
+  fixture.detectChanges();
+  expectedOrder.entrySeq().forEach(entry => {
+    const [categoryId, items] = entry;
+    items.valueSeq().forEach(itemId => orderService.addItem(itemId, categoryId));
+  });
+  tick();
+  fixture.detectChanges();
+  verifyOrderAndTotal(fixture.debugElement, expectedOrder, TestCatalogLoaderService.getTestCatalog());
+}
 
-  const catalog: Catalog = { entries: Map({
-    category2: {
-      id: "category2",
-      name: "category 2",
-      icon: "category2",
-      items: {
-        item21: {
-          id: "item21",
-          category: "category2",
-          name: "Item 21",
-          commercialSource: "Item 21 Source",
-          value: 1234
-        },
-        item22: {
-          id: "item22",
-          category: "category2",
-          name: "Item 22",
-          commercialSource: "Item 22 Source",
-          value: 4567
-        }
-      }
-    },
-    category1: {
-      id: "category1",
-      name: "category 1",
-      icon: "category1",
-      items: {
-        item11: {
-          id: "item11",
-          category: "category1",
-          name: "Item 11",
-          commercialSource: "Item 11 Source",
-          value: 1234
-        },
-        item12: {
-          id: "item12",
-          category: "category1",
-          name: "Item 12",
-          commercialSource: "Item 12 Source",
-          value: 4567
-        }
-      }
-    }
-  })
-  };
+function removeFirstOrderItem(fixture: ComponentFixture<OrderComponent>) {
+  const removeButton = fixture.debugElement.query(By.css(".item-remove"));
+  expect(removeButton).toBeTruthy();
+  removeButton.triggerEventHandler("click", 0);
+  tick();
+  fixture.detectChanges();
+}
+
+describe("OrderComponent", () => {
+  let component: OrderComponent;
+  let fixture: ComponentFixture<OrderComponent>;
+  let orderService: OrderService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderComponent, TestHostComponent, PricePipe ],
+      declarations: [ OrderComponent, PricePipe ],
       imports: [
         MatCardModule,
         MatIconModule,
         MatListModule
       ],
-      providers: [ OrderService ]
+      providers: [
+        OrderService,
+        CatalogService,
+        { provide: CatalogLoaderToken, useClass: TestCatalogLoaderService }
+      ]
     })
     .compileComponents();
   }));
@@ -123,7 +92,7 @@ describe("OrderComponent", () => {
   beforeEach(() => {
     orderService = TestBed.get(OrderService);
     orderService.clearOrder();
-    fixture = TestBed.createComponent(TestHostComponent);
+    fixture = TestBed.createComponent(OrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -133,17 +102,12 @@ describe("OrderComponent", () => {
   });
 
   it("should have no items without input", () => {
-    verifyOrderAndTotal(fixture.debugElement, null, catalog);
+    verifyOrderAndTotal(fixture.debugElement, null, TestCatalogLoaderService.getTestCatalog());
   });
 
   it("should have one item", fakeAsync(() => {
     const expectedOrder = Map({ category1: Set(["item11"]) });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "category1");
-    tick();
-    fixture.detectChanges();
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should have one item from each category", fakeAsync(() => {
@@ -151,58 +115,27 @@ describe("OrderComponent", () => {
       category1: Set(["item11"]),
       category2: Set(["item22"])
     });
-
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "category1");
-    orderService.addItem("item22", "category2");
-    tick();
-    fixture.detectChanges();
-
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should not fail for invalid category", fakeAsync(() => {
     const expectedOrder = Map({ foo1: Set(["item11"]) });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "foo1");
-    tick();
-    fixture.detectChanges();
-
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
-  /* tslint:disable-next-line:no-identical-functions */
   it("should not fail for invalid item id", fakeAsync(() => {
     const expectedOrder = Map({ category1: Set(["itemXX"]) });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("itemXX", "category1");
-    tick();
-    fixture.detectChanges();
-
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should remove the only item", fakeAsync(() => {
     const expectedOrder = Map({ category1: Set(["item11"]) });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "category1");
-    tick();
-    fixture.detectChanges();
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
 
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
-
-    const removeButton = fixture.debugElement.query(By.css(".item-remove"));
-    expect(removeButton).toBeTruthy();
-    removeButton.triggerEventHandler("click", 0);
-    tick();
-    fixture.detectChanges();
+    removeFirstOrderItem(fixture);
 
     const emptyOrder: Map<string, Set<string>> = Map();
-    verifyOrderAndTotal(fixture.debugElement, emptyOrder, catalog);
+    verifyOrderAndTotal(fixture.debugElement, emptyOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 
   it("should remove the only item from a category and that category", fakeAsync(() => {
@@ -210,43 +143,21 @@ describe("OrderComponent", () => {
       category1: Set(["item11"]),
       category2: Set(["item22"])
     });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "category1");
-    orderService.addItem("item22", "category2");
-    tick();
-    fixture.detectChanges();
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
 
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
-
-    const removeButton = fixture.debugElement.query(By.css(".item-remove"));
-    expect(removeButton).toBeTruthy();
-    removeButton.triggerEventHandler("click", 0);
-    tick();
-    fixture.detectChanges();
+    removeFirstOrderItem(fixture);
 
     const updatedOrder = Map({ category2: Set(["item22"]) });
-    verifyOrderAndTotal(fixture.debugElement, updatedOrder, catalog);
+    verifyOrderAndTotal(fixture.debugElement, updatedOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 
   it("should remove a single item from a category", fakeAsync(() => {
     const expectedOrder = Map({ category1: Set(["item11", "item12"]) });
-    component.catalog = catalog;
-    fixture.detectChanges();
-    orderService.addItem("item11", "category1");
-    orderService.addItem("item12", "category1");
-    tick();
-    fixture.detectChanges();
+    applyOrderAndVerify(expectedOrder, fixture, orderService);
 
-    verifyOrderAndTotal(fixture.debugElement, expectedOrder, catalog);
-
-    const removeButton = fixture.debugElement.query(By.css(".item-remove"));
-    expect(removeButton).toBeTruthy();
-    removeButton.triggerEventHandler("click", 0);
-    tick();
-    fixture.detectChanges();
+    removeFirstOrderItem(fixture);
 
     const updatedOrder = Map({ category1: Set(["item12"]) });
-    verifyOrderAndTotal(fixture.debugElement, updatedOrder, catalog);
+    verifyOrderAndTotal(fixture.debugElement, updatedOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 });

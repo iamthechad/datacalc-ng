@@ -19,6 +19,8 @@ import {CatalogService} from "./service/catalog-service";
 import {OrderService} from "./service/order-service";
 import {AngularFireModule} from "@angular/fire";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
+import {CatalogLoaderToken} from "./model/catalog-loader";
+import {FirebaseCatalogLoaderService} from "./service/firebase-catalog-loader.service";
 
 @NgModule({
   declarations: [
@@ -42,7 +44,11 @@ import {AngularFireDatabaseModule} from "@angular/fire/database";
     MatButtonModule,
     MatListModule
   ],
-  providers: [CatalogService, OrderService],
+  providers: [
+    { provide: CatalogLoaderToken, useClass: FirebaseCatalogLoaderService },
+    CatalogService,
+    OrderService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
