@@ -1,8 +1,11 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
 import {Catalog} from "../model/catalog";
 import {Category} from "../model/category";
 
 import * as _ from "lodash";
+import {CatalogService} from "../service/catalog-service";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: "mt-catalog",
@@ -10,13 +13,26 @@ import * as _ from "lodash";
   styleUrls: ["./catalog.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogComponent {
-
-  @Input() catalog: Catalog;
+export class CatalogComponent implements OnDestroy {
 
   @Input() selectedCategory: string;
 
   @Output() categorySelected = new EventEmitter<string>();
+
+  private catalog: Catalog;
+
+  private onDestroy = new Subject<void>();
+
+  constructor(private catalogService: CatalogService) {
+    this.catalogService.getCatalogObservable().pipe(
+      takeUntil(this.onDestroy)
+    ).subscribe(catalog => this.catalog = catalog);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.complete();
+  }
 
   onCategorySelected(categoryId) {
     this.categorySelected.emit(categoryId);

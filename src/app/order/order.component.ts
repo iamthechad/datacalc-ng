@@ -9,7 +9,8 @@ import {Catalog} from "../model/catalog";
 import {BehaviorSubject, Subject} from "rxjs";
 import {OrderService} from "../service/order-service";
 import {Set, Map} from "immutable";
-import {takeUntil} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
+import {CatalogService} from "../service/catalog-service";
 
 @Component({
   selector: "mt-order",
@@ -18,22 +19,23 @@ import {takeUntil} from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderComponent implements OnDestroy {
-  @Input() catalog: Catalog;
-
   @ViewChild("orderTotalElement") orderTotalElement: ElementRef;
 
   orderTotal = new BehaviorSubject<number>(0);
 
   order: Map<string, Set<string>>;
 
+  private catalog: Catalog;
+
   private onDestroy = new Subject<void>();
 
-  constructor(private orderService: OrderService) {
-    this.orderService.getOrderObservable().pipe(
-      takeUntil(this.onDestroy)
-    ).subscribe(order => {
-      this.order = order;
-      this.orderTotal.next(Util.getOrderTotal(order, this.catalog));
+  constructor(private orderService: OrderService,
+              private catalogService: CatalogService) {
+    this.catalogService.getCatalogObservable().pipe(
+      take(1)
+    ).subscribe(catalog => {
+      this.catalog = catalog;
+      this.listenForOrderChanges();
     });
   }
 
@@ -49,4 +51,13 @@ export class OrderComponent implements OnDestroy {
   getOrderCategories = (): Category[] => Util.getCategoriesForOrder(this.order, this.catalog);
 
   getOrderCategoryItems = (categoryId: string): Item[] => Util.getOrderCategoryItems(this.order, this.catalog, categoryId);
+
+  private listenForOrderChanges(): void {
+    this.orderService.getOrderObservable().pipe(
+      takeUntil(this.onDestroy)
+    ).subscribe(order => {
+      this.order = order;
+      this.orderTotal.next(Util.getOrderTotal(order, this.catalog));
+    });
+  }
 }

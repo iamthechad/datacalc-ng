@@ -1,42 +1,17 @@
-import {Injectable} from "@angular/core";
+import {Inject, Injectable} from "@angular/core";
 import {ReplaySubject, Observable} from "rxjs";
-import {Category} from "../model/category";
 import {Catalog} from "../model/catalog";
-import {Item} from "../model/item";
-import {Map} from "immutable";
-
-import * as _ from "lodash";
-import {recordify} from "typed-immutable-record";
-import {ItemRecord} from "../model/item-record";
-import {CategoryRecord} from "../model/category-record";
-import {AngularFireDatabase} from "@angular/fire/database";
+import {CatalogLoader, CatalogLoaderToken} from "../model/catalog-loader";
 
 @Injectable()
 export class CatalogService {
-  private catalogObservable: ReplaySubject<Catalog> = new ReplaySubject();
-  private item: Observable<any>;
+  private catalogObservable: ReplaySubject<Catalog> = new ReplaySubject(1);
 
-  constructor(ad: AngularFireDatabase) {
-    this.item = ad.object("/catalog").valueChanges();
-    this.item.subscribe(snapshot => this.buildCatalog(snapshot));
+  constructor(@Inject(CatalogLoaderToken) private catalogLoaderService: CatalogLoader) {
+    this.catalogLoaderService.loadCatalog().subscribe(catalog => this.catalogObservable.next(catalog));
   }
 
   getCatalogObservable(): Observable<Catalog> {
     return this.catalogObservable.asObservable();
-  }
-
-  private buildCatalog(snapshot) {
-    if (snapshot.categories && snapshot.items) {
-      const categoryMap: { [key: string]: Category } = {};
-      _.forEach(snapshot.categories, (snapshotCategory: Category, id) => {
-        categoryMap[id] = recordify<Category, CategoryRecord>(Object.assign({items: {}, id}, snapshotCategory));
-      });
-
-      _.forEach(snapshot.items, (snapshotItem: Item, id) => {
-        categoryMap[snapshotItem.category].items[id] = recordify<Item, ItemRecord>(Object.assign({id}, snapshotItem));
-      });
-
-      this.catalogObservable.next({ entries: Map(categoryMap) });
-    }
   }
 }
