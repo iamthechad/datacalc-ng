@@ -26,7 +26,7 @@ class TestHostComponent {
 function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catalog: Catalog) {
   const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
   expect(categoryButtons.length).toEqual(catalog.getCategories().length);
-  categoryButtons.forEach((button: DebugElement, index: number) => {
+  categoryButtons.forEach((button: DebugElement, index) => {
     expect(button.nativeElement.textContent).toContain(`category ${index + 1}`);
   });
 }
