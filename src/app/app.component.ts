@@ -21,7 +21,7 @@ export class AppComponent {
 
   catalogLoaded = false;
 
-  selectedCategory: string;
+  private selectedCategory: string;
 
   constructor(private catalogService: CatalogService,
               private orderService: OrderService,
