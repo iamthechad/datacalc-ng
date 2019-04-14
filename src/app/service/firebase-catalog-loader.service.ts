@@ -5,12 +5,8 @@ import {Observable, of} from "rxjs";
 import {Catalog} from "../model/catalog";
 import {Category} from "../model/category";
 import * as _ from "lodash";
-import {recordify} from "typed-immutable-record";
-import {CategoryRecord} from "../model/category-record";
 import {Item} from "../model/item";
-import {ItemRecord} from "../model/item-record";
 import {flatMap} from "rxjs/operators";
-import {Map} from "immutable";
 
 @Injectable()
 export class FirebaseCatalogLoaderService implements CatalogLoader {
@@ -24,16 +20,16 @@ export class FirebaseCatalogLoaderService implements CatalogLoader {
         if (snapshot.categories && snapshot.items) {
           const categoryMap: { [key: string]: Category } = {};
           _.forEach(snapshot.categories, (snapshotCategory: Category, id) => {
-            categoryMap[id] = recordify<Category, CategoryRecord>(Object.assign({items: {}, id}, snapshotCategory));
+            categoryMap[id] = {...{items: {}, id}, ...snapshotCategory};
           });
 
           _.forEach(snapshot.items, (snapshotItem: Item, id) => {
-            categoryMap[snapshotItem.category].items[id] = recordify<Item, ItemRecord>(Object.assign({id}, snapshotItem));
+            categoryMap[snapshotItem.category].items[id] = {...{id}, ...snapshotItem};
           });
 
-          return of({ entries: Map(categoryMap) } as Catalog);
+          return of(new Catalog(categoryMap));
         }
-        return of({ entries: Map() } as Catalog);
+        return of(new Catalog({}));
       })
     );
   }

@@ -1,31 +1,24 @@
 import {async, TestBed} from "@angular/core/testing";
 
-import {Set, Map} from "immutable";
 import {OrderService} from "./order-service";
+import {Order} from "../model/order";
 
-function verifyOrderObject(expectedOrder: Map<string, Set<string>>, actualOrder: Map<string, Set<string>>) {
+function verifyOrderObject(expectedOrder: Order, actualOrder: Order) {
   expect(expectedOrder).toBeTruthy();
   expect(actualOrder).toBeTruthy();
-  expectedOrder.keySeq().toArray().forEach(value => {
-    expect(actualOrder.has(value)).toBeTruthy();
-    const expectedItems = expectedOrder.get(value);
-    const actualItems = actualOrder.get(value);
-    expect(expectedItems.size).toEqual(actualItems.size);
-    expectedItems.toArray().forEach(item => expect(actualItems.contains(item)).toBeTruthy());
-  });
+  expect(expectedOrder).toEqual(actualOrder);
 }
 
-function verifyOrderWithService(expectedOrder: Map<string, Set<string>>, orderService: OrderService) {
+function verifyOrderWithService(expectedOrder: Order, orderService: OrderService) {
   expect(expectedOrder).toBeTruthy();
-  expectedOrder.keySeq().toArray().forEach(value => {
-    const expectedItems = expectedOrder.get(value);
-    const actualItems = orderService.getItemsForCategory(value);
-    expect(expectedItems.size).toEqual(actualItems.size);
-    expectedItems.toArray().forEach(item => expect(actualItems.contains(item)).toBeTruthy());
+  expectedOrder.getCategoryIds().forEach(categoryId => {
+    const expectedItems = expectedOrder.getItemsForCategory(categoryId);
+    const actualItems = orderService.getItemsForCategory(categoryId);
+    expect(expectedItems).toEqual(actualItems);
   });
 }
 
-function verifyOrderAndObservable(expectedOrder: Map<string, Set<string>>, orderService: OrderService, done: DoneFn) {
+function verifyOrderAndObservable(expectedOrder: Order, orderService: OrderService, done: DoneFn) {
   verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
   verifyOrderWithService(expectedOrder, orderService);
   orderService.getOrderObservable().subscribe(order => {
@@ -53,17 +46,17 @@ describe("OrderService", () => {
   });
 
   it("should have one item", (done: DoneFn) => {
-    const expectedOrder = Map({
-      category1: Set(["item11"])
+    const expectedOrder = new Order({
+      category1: new Set(["item11"])
     });
     orderService.addItem("item11", "category1");
     verifyOrderAndObservable(expectedOrder, orderService, done);
   });
 
   it("should have one item from each category", (done: DoneFn) => {
-    const expectedOrder = Map({
-      category1: Set(["item11"]),
-      category2: Set(["item22"])
+    const expectedOrder = new Order({
+      category1: new Set(["item11"]),
+      category2: new Set(["item22"])
     });
 
     orderService.addItem("item11", "category1");
@@ -73,8 +66,8 @@ describe("OrderService", () => {
   });
 
   it("should not fail for invalid category", (done: DoneFn) => {
-    const expectedOrder = Map({
-      foo1: Set(["item11"])
+    const expectedOrder = new Order({
+      foo1: new Set(["item11"])
     });
     orderService.addItem("item11", "foo1");
 
@@ -83,8 +76,8 @@ describe("OrderService", () => {
 
   /* tslint:disable-next-line:no-identical-functions */
   it("should not fail for invalid item id", (done: DoneFn) => {
-    const expectedOrder = Map({
-      category1: Set(["itemXX"])
+    const expectedOrder = new Order({
+      category1: new Set(["itemXX"])
     });
     orderService.addItem("itemXX", "category1");
 
@@ -95,7 +88,7 @@ describe("OrderService", () => {
     orderService.addItem("item11", "category1");
     orderService.removeItem("item11", "category1");
 
-    const emptyOrder: Map<string, Set<string>> = Map();
+    const emptyOrder = new Order();
     verifyOrderAndObservable(emptyOrder, orderService, done);
   });
 
@@ -104,8 +97,8 @@ describe("OrderService", () => {
     orderService.addItem("item22", "category2");
 
     orderService.removeItem("item11", "category1");
-    const updatedOrder = Map({
-      category2: Set(["item22"])
+    const updatedOrder = new Order({
+      category2: new Set(["item22"])
     });
     verifyOrderAndObservable(updatedOrder, orderService, done);
   });
@@ -115,8 +108,8 @@ describe("OrderService", () => {
     orderService.addItem("item12", "category1");
 
     orderService.removeItem("item11", "category1");
-    const updatedOrder = Map({
-      category1: Set(["item12"])
+    const updatedOrder = new Order({
+      category1: new Set(["item12"])
     });
     verifyOrderAndObservable(updatedOrder, orderService, done);
   });

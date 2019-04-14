@@ -3,7 +3,6 @@ import {Component, DebugElement} from "@angular/core";
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
 import {By} from "@angular/platform-browser";
-import {Map} from "immutable";
 
 import {Catalog} from "../model/catalog";
 import {CatalogComponent} from "./catalog.component";
@@ -26,7 +25,7 @@ class TestHostComponent {
 
 function verifyCategoryItems(fixture: ComponentFixture<TestHostComponent>, catalog: Catalog) {
   const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
-  expect(categoryButtons.length).toEqual(catalog.entries.valueSeq().size);
+  expect(categoryButtons.length).toEqual(catalog.getCategories().length);
   categoryButtons.forEach((button: DebugElement, index: number) => {
     expect(button.nativeElement.textContent).toContain(`category ${index + 1}`);
   });

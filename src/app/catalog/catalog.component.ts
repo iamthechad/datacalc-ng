@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Outp
 import {Catalog} from "../model/catalog";
 import {Category} from "../model/category";
 
-import * as _ from "lodash";
 import {CatalogService} from "../service/catalog-service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
@@ -39,11 +38,7 @@ export class CatalogComponent implements OnDestroy {
   }
 
   getCategories(): Category[] {
-    if (this.catalog) {
-      return _.sortBy(_.values(this.catalog.entries.valueSeq().toArray()), ["id"]);
-    }
-
-    return [];
+    return this.catalog.getCategories();
   }
 
   translateIcon(rawIcon: string): string {

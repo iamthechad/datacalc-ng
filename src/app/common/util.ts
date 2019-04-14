@@ -1,8 +1,8 @@
 import {Category} from "../model/category";
-import {Set, Map} from "immutable";
 import * as _ from "lodash";
 import {Item} from "../model/item";
 import {Catalog} from "../model/catalog";
+import {Order} from "../model/order";
 
 export class Util {
   static formatPrice(cents: number): string {
@@ -10,33 +10,33 @@ export class Util {
   }
 
   static getItemsForCategory(catalog: Catalog, categoryId: string): Item[] {
-    if (catalog && catalog.entries.has(categoryId)) {
-      return _.sortBy(_.values(catalog.entries.get(categoryId).items), ["id"]);
+    if (catalog && catalog.hasCategory(categoryId)) {
+      return _.sortBy(_.values(catalog.getCategory(categoryId).items), ["id"]);
     }
 
     return [];
   }
 
-  static getCategoriesForOrder(order: Map<string, Set<string>>, catalog: Catalog): Category[] {
+  static getCategoriesForOrder(order: Order, catalog: Catalog): Category[] {
     if (order) {
-      return _.compact(order.keySeq().toArray().sort().map(id => (catalog ? catalog.entries.get(id) : null)));
+      return _.compact(order.getCategoryIds().map(id => (catalog ? catalog.getCategory(id) : null)));
     }
 
     return [];
   }
 
-  static getOrderCategoryItems(order: Map<string, Set<string>>, catalog: Catalog, categoryId: string): Item[] {
-    const orderCategoryItemIds = order ? order.get(categoryId, Set()) : Set();
-    const categoryItems = (catalog && catalog.entries.has(categoryId)) ? catalog.entries.get(categoryId).items : {};
+  static getOrderCategoryItems(order: Order, catalog: Catalog, categoryId: string): Item[] {
+    const orderCategoryItemIds = order ? order.getItemsForCategory(categoryId) : new Set<string>([]);
+    const categoryItems = (catalog && catalog.hasCategory(categoryId)) ? catalog.getCategory(categoryId).items : {};
 
     return _.sortBy(
       _.values(
-        _.pickBy(categoryItems, item => orderCategoryItemIds.contains(item.id))
+        _.pickBy(categoryItems, item => orderCategoryItemIds.has(item.id))
       ),
       ["id"]);
   }
 
-  static getOrderTotal(order: Map<string, Set<string>>, catalog: Catalog): number {
+  static getOrderTotal(order: Order, catalog: Catalog): number {
     return _.reduce(Util.getCategoriesForOrder(order, catalog), (prevTotal: number, category) => {
       const categoryTotal = _.reduce(Util.getOrderCategoryItems(order, catalog, category.id), (itemPrevTotal: number, item: Item) => {
         return itemPrevTotal + item.value;

@@ -3,19 +3,19 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from "@angular/core/t
 import { OrderComponent } from "./order.component";
 import {DebugElement} from "@angular/core";
 import {Category} from "../model/category";
-import {Set, Map} from "immutable";
 import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
 import {PricePipe} from "../price.pipe";
 import {By} from "@angular/platform-browser";
-import {Util} from "../common/Util";
+import {Util} from "../common/util";
 import {Item} from "../model/item";
 import {Catalog} from "../model/catalog";
 import {OrderService} from "../service/order-service";
 import {CatalogService} from "../service/catalog-service";
 import {CatalogLoaderToken} from "../model/catalog-loader";
 import {TestCatalogLoaderService} from "../test/service/test-catalog-loader.service";
+import {Order} from "../model/order";
 
-function verifyOrder(itemList: DebugElement[], order: Map<string, Set<string>>, catalog: Catalog) {
+function verifyOrder(itemList: DebugElement[], order: Order, catalog: Catalog) {
   const expectedCategories = Util.getCategoriesForOrder(order, catalog);
   expect(itemList.length).toEqual(expectedCategories.length);
 
@@ -43,16 +43,15 @@ function verifyTotal(total: DebugElement, expectedTotal: number) {
   expect(total.nativeElement.textContent).toEqual(Util.formatPrice(expectedTotal));
 }
 
-function verifyOrderAndTotal(debugElement: DebugElement, expectedOrder: Map<string, Set<string>>, catalog: Catalog) {
+function verifyOrderAndTotal(debugElement: DebugElement, expectedOrder: Order, catalog: Catalog) {
   verifyOrder(debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
   verifyTotal(debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
 }
 
-function applyOrderAndVerify(expectedOrder: Map<string, Set<string>>, fixture: ComponentFixture<OrderComponent>, orderService: OrderService) {
+function applyOrderAndVerify(expectedOrder: Order, fixture: ComponentFixture<OrderComponent>, orderService: OrderService) {
   fixture.detectChanges();
-  expectedOrder.entrySeq().forEach(entry => {
-    const [categoryId, items] = entry;
-    items.valueSeq().forEach(itemId => orderService.addItem(itemId, categoryId));
+  expectedOrder.getCategoryIds().forEach(categoryId => {
+    expectedOrder.getItemsForCategory(categoryId).forEach(itemId => orderService.addItem(itemId, categoryId));
   });
   tick();
   fixture.detectChanges();
@@ -106,58 +105,58 @@ describe("OrderComponent", () => {
   });
 
   it("should have one item", fakeAsync(() => {
-    const expectedOrder = Map({ category1: Set(["item11"]) });
+    const expectedOrder = new Order({ category1: new Set(["item11"]) });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should have one item from each category", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["item11"]),
-      category2: Set(["item22"])
+    const expectedOrder = new Order({
+      category1: new Set(["item11"]),
+      category2: new Set(["item22"])
     });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should not fail for invalid category", fakeAsync(() => {
-    const expectedOrder = Map({ foo1: Set(["item11"]) });
+    const expectedOrder = new Order({ foo1: new Set(["item11"]) });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should not fail for invalid item id", fakeAsync(() => {
-    const expectedOrder = Map({ category1: Set(["itemXX"]) });
+    const expectedOrder = new Order({ category1: new Set(["itemXX"]) });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
   }));
 
   it("should remove the only item", fakeAsync(() => {
-    const expectedOrder = Map({ category1: Set(["item11"]) });
+    const expectedOrder = new Order({ category1: new Set(["item11"]) });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
 
     removeFirstOrderItem(fixture);
 
-    const emptyOrder: Map<string, Set<string>> = Map();
+    const emptyOrder = new Order();
     verifyOrderAndTotal(fixture.debugElement, emptyOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 
   it("should remove the only item from a category and that category", fakeAsync(() => {
-    const expectedOrder = Map({
-      category1: Set(["item11"]),
-      category2: Set(["item22"])
+    const expectedOrder = new Order({
+      category1: new Set(["item11"]),
+      category2: new Set(["item22"])
     });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
 
     removeFirstOrderItem(fixture);
 
-    const updatedOrder = Map({ category2: Set(["item22"]) });
+    const updatedOrder = new Order({ category2: new Set(["item22"]) });
     verifyOrderAndTotal(fixture.debugElement, updatedOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 
   it("should remove a single item from a category", fakeAsync(() => {
-    const expectedOrder = Map({ category1: Set(["item11", "item12"]) });
+    const expectedOrder = new Order({ category1: new Set(["item11", "item12"]) });
     applyOrderAndVerify(expectedOrder, fixture, orderService);
 
     removeFirstOrderItem(fixture);
 
-    const updatedOrder = Map({ category1: Set(["item12"]) });
+    const updatedOrder = new Order({ category1: new Set(["item12"]) });
     verifyOrderAndTotal(fixture.debugElement, updatedOrder, TestCatalogLoaderService.getTestCatalog());
   }));
 });

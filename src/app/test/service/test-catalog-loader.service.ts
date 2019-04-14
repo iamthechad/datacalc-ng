@@ -1,5 +1,4 @@
 import {CatalogLoader} from "../../model/catalog-loader";
-import {Map} from "immutable";
 import {Catalog} from "../../model/catalog";
 import {Observable, of} from "rxjs";
 
@@ -9,9 +8,8 @@ export class TestCatalogLoaderService implements CatalogLoader {
   }
 
   public static getTestCatalog(): Catalog {
-    return {
-      entries: Map({
-        category2: {
+    return new Catalog({
+      category2: {
           id: "category2",
           name: "category 2",
           icon: "category2",
@@ -32,7 +30,7 @@ export class TestCatalogLoaderService implements CatalogLoader {
             }
           }
         },
-        category1: {
+      category1: {
           id: "category1",
           name: "category 1",
           icon: "category1",
@@ -53,7 +51,6 @@ export class TestCatalogLoaderService implements CatalogLoader {
             }
           }
         }
-      })
-    };
+    });
   }
 }

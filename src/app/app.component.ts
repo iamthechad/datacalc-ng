@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from "@angular/core";
 import {CatalogService} from "./service/catalog-service";
 
-import {Map, Set} from "immutable";
 import {OrderService} from "./service/order-service";
-import {Util} from "./common/Util";
+import {Util} from "./common/util";
 import {Catalog} from "./model/catalog";
 
 @Component({
@@ -29,7 +28,7 @@ export class AppComponent {
               private changeDetectorRef: ChangeDetectorRef) {
     this.catalogService.getCatalogObservable().subscribe((catalog: Catalog) => {
       this.catalog = catalog;
-      this.selectedCategory = this.catalog.entries.keySeq().toArray().sort()[0];
+      this.selectedCategory = this.catalog.firstCategory.id;
       this.catalogLoaded = true;
       this.changeDetectorRef.markForCheck();
     });
