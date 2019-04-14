@@ -27,14 +27,12 @@ export class OrderService {
 
   addItem(itemId: string, categoryId: string): void {
     this.currentOrder.addItem(categoryId, itemId);
-    this.storeOrder();
-    this.orderObservable.next(this.currentOrder);
+    this.notifyOrderUpdate();
   }
 
   removeItem(itemId: string, categoryId: string): void {
     this.currentOrder.removeItem(categoryId, itemId);
-    this.storeOrder();
-    this.orderObservable.next(this.currentOrder);
+    this.notifyOrderUpdate();
   }
 
   getItemsForCategory(categoryId: string): Set<string> {
@@ -43,6 +41,10 @@ export class OrderService {
 
   clearOrder(): void {
     this.currentOrder.clear();
+    this.notifyOrderUpdate();
+  }
+
+  private notifyOrderUpdate(): void {
     this.storeOrder();
     this.orderObservable.next(this.currentOrder);
   }

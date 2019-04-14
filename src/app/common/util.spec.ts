@@ -52,8 +52,8 @@ describe("Util functions", () => {
   };
 
   const catalog = new Catalog({
-      category1,
-      category2
+    category1,
+    category2
   });
 
   const order = new Order({

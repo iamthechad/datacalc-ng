@@ -45,7 +45,7 @@ describe("OrderService", () => {
     expect(orderService).toBeTruthy();
   });
 
-  it("should have one item", (done: DoneFn) => {
+  it("should have one item", (done) => {
     const expectedOrder = new Order({
       category1: new Set(["item11"])
     });
@@ -53,7 +53,7 @@ describe("OrderService", () => {
     verifyOrderAndObservable(expectedOrder, orderService, done);
   });
 
-  it("should have one item from each category", (done: DoneFn) => {
+  it("should have one item from each category", (done) => {
     const expectedOrder = new Order({
       category1: new Set(["item11"]),
       category2: new Set(["item22"])
@@ -65,7 +65,7 @@ describe("OrderService", () => {
     verifyOrderAndObservable(expectedOrder, orderService, done);
   });
 
-  it("should not fail for invalid category", (done: DoneFn) => {
+  it("should not fail for invalid category", (done) => {
     const expectedOrder = new Order({
       foo1: new Set(["item11"])
     });
@@ -75,7 +75,7 @@ describe("OrderService", () => {
   });
 
   /* tslint:disable-next-line:no-identical-functions */
-  it("should not fail for invalid item id", (done: DoneFn) => {
+  it("should not fail for invalid item id", (done) => {
     const expectedOrder = new Order({
       category1: new Set(["itemXX"])
     });
@@ -84,7 +84,7 @@ describe("OrderService", () => {
     verifyOrderAndObservable(expectedOrder, orderService, done);
   });
 
-  it("should remove the only item", (done: DoneFn) => {
+  it("should remove the only item", (done) => {
     orderService.addItem("item11", "category1");
     orderService.removeItem("item11", "category1");
 
@@ -92,7 +92,7 @@ describe("OrderService", () => {
     verifyOrderAndObservable(emptyOrder, orderService, done);
   });
 
-  it("should remove the only item from a category and that category", (done: DoneFn) => {
+  it("should remove the only item from a category and that category", (done) => {
     orderService.addItem("item11", "category1");
     orderService.addItem("item22", "category2");
 
@@ -103,7 +103,7 @@ describe("OrderService", () => {
     verifyOrderAndObservable(updatedOrder, orderService, done);
   });
 
-  it("should remove a single item from a category", (done: DoneFn) => {
+  it("should remove a single item from a category", (done) => {
     orderService.addItem("item11", "category1");
     orderService.addItem("item12", "category1");
 

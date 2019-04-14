@@ -117,7 +117,7 @@ describe("ItemsComponent", () => {
     fixture.detectChanges();
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));
     expect(itemCards.length).toEqual(items.length);
-    itemCards.forEach((card: DebugElement, index: number) => {
+    itemCards.forEach((card: DebugElement, index) => {
       verifyCard(card, items[index]);
     });
   });
@@ -128,7 +128,7 @@ describe("ItemsComponent", () => {
     fixture.detectChanges();
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));
     expect(itemCards.length).toEqual(items.length);
-    itemCards.forEach((card: DebugElement, index: number) => {
+    itemCards.forEach((card: DebugElement, index) => {
       verifyCard(card, items[index]);
     });
   });
@@ -140,7 +140,7 @@ describe("ItemsComponent", () => {
     const expectedSelectIndex = 1;
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));
     expect(itemCards.length).toEqual(items.length);
-    itemCards.forEach((card: DebugElement, index: number) => {
+    itemCards.forEach((card: DebugElement, index) => {
       verifyCard(card, items[index], expectedSelectIndex === index);
     });
   });
@@ -150,7 +150,7 @@ describe("ItemsComponent", () => {
     fixture.detectChanges();
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));
     expect(itemCards.length).toEqual(items.length);
-    itemCards.forEach((card: DebugElement, index: number) => {
+    itemCards.forEach((card: DebugElement, index) => {
       verifyCard(card, items[index]);
     });
     const cardSelectControl = itemCards[0].query(By.css(".item-select"));
