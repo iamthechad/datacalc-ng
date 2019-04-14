@@ -2,7 +2,7 @@
   <mat-card-title>Categories</mat-card-title>
   <mat-card-content>
     <mat-list>
-      <mat-list-item *ngFor="let category of getCategories()">
+      <mat-list-item *ngFor="let category of categories">
         <button mat-button (click)="onCategorySelected(category.id)" class="catalog-entry" [class.selected]="category.id === selectedCategory"><mat-icon mat-list-icon fontSet="fas" [fontIcon]="translateIcon(category.icon)"></mat-icon> {{category.name}}</button>
       </mat-list-item>
     </mat-list>

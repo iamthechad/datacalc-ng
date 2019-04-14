@@ -14,13 +14,15 @@ import {environment} from "../environments/environment";
 import "hammerjs";
 import {ItemsComponent} from "./items/items.component";
 import {OrderComponent} from "./order/order.component";
-import {PricePipe} from "./price.pipe";
+import {PricePipe} from "./pipe/price.pipe";
 import {CatalogService} from "./service/catalog-service";
 import {OrderService} from "./service/order-service";
 import {AngularFireModule} from "@angular/fire";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {CatalogLoaderToken} from "./model/catalog-loader";
 import {FirebaseCatalogLoaderService} from "./service/firebase-catalog-loader.service";
+import {IconTranslateServiceToken} from "./service/icon-translate.service";
+import {FontAwesomeIconTranslateService} from "./service/font-awesome-icon-translate.service";
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import {FirebaseCatalogLoaderService} from "./service/firebase-catalog-loader.se
   ],
   providers: [
     { provide: CatalogLoaderToken, useClass: FirebaseCatalogLoaderService },
+    { provide: IconTranslateServiceToken, useClass: FontAwesomeIconTranslateService },
     CatalogService,
     OrderService
   ],

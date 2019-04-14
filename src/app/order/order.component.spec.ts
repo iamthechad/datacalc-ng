@@ -4,7 +4,7 @@ import { OrderComponent } from "./order.component";
 import {DebugElement} from "@angular/core";
 import {Category} from "../model/category";
 import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
-import {PricePipe} from "../price.pipe";
+import {PricePipe} from "../pipe/price.pipe";
 import {By} from "@angular/platform-browser";
 import {Util} from "../common/util";
 import {Item} from "../model/item";
