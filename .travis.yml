@@ -7,6 +7,7 @@ addons:
   chrome: stable
 node_js:
 - '8.9'
+cache: npm
 jobs:
   include:
   - stage: Test

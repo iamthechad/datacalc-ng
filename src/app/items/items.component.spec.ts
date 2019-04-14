@@ -7,8 +7,7 @@ import {PricePipe} from "../price.pipe";
 import {By} from "@angular/platform-browser";
 import {Item} from "../model/item";
 import {Component, DebugElement} from "@angular/core";
-import {Set} from "immutable";
-import {Util} from "../common/Util";
+import {Util} from "../common/util";
 
 @Component({
   template: `
@@ -125,7 +124,7 @@ describe("ItemsComponent", () => {
 
   it("should show items with none selected matching order", () => {
     component.items = items;
-    component.orderItems = Set(["abc", "123"]);
+    component.orderItems = new Set(["abc", "123"]);
     fixture.detectChanges();
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));
     expect(itemCards.length).toEqual(items.length);
@@ -136,7 +135,7 @@ describe("ItemsComponent", () => {
 
   it("should show items with one selected matching order", () => {
     component.items = items;
-    component.orderItems = Set(["item2"]);
+    component.orderItems = new Set(["item2"]);
     fixture.detectChanges();
     const expectedSelectIndex = 1;
     const itemCards = fixture.debugElement.queryAll(By.css(".category-item"));

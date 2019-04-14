@@ -1,16 +1,16 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild
+  ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild
 } from "@angular/core";
 import {Category} from "../model/category";
 
 import {Item} from "../model/item";
-import {Util} from "../common/Util";
+import {Util} from "../common/util";
 import {Catalog} from "../model/catalog";
 import {BehaviorSubject, Subject} from "rxjs";
 import {OrderService} from "../service/order-service";
-import {Set, Map} from "immutable";
 import {take, takeUntil} from "rxjs/operators";
 import {CatalogService} from "../service/catalog-service";
+import {Order} from "../model/order";
 
 @Component({
   selector: "mt-order",
@@ -23,7 +23,7 @@ export class OrderComponent implements OnDestroy {
 
   orderTotal = new BehaviorSubject<number>(0);
 
-  order: Map<string, Set<string>>;
+  order: Order;
 
   private catalog: Catalog;
 

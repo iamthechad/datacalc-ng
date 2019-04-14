@@ -1,8 +1,8 @@
-import {Util} from "./Util";
+import {Util} from "./util";
 import {Category} from "../model/category";
 import {Item} from "../model/item";
-import {Set, Map} from "immutable";
 import {Catalog} from "../model/catalog";
+import {Order} from "../model/order";
 
 describe("Util functions", () => {
   const item1: Item = {
@@ -51,25 +51,23 @@ describe("Util functions", () => {
     items: { item3, item4 }
   };
 
-  const catalog: Catalog = {
-    entries: Map({
+  const catalog = new Catalog({
       category1,
       category2
-    })
-  };
-
-  const order: Map<string, Set<string>> = Map({
-    category1: Set(["item1"])
   });
 
-  const multiOrder: Map<string, Set<string>> = Map({
-    category1: Set(["item1"]),
-    category2: Set(["item3", "item4"])
+  const order = new Order({
+    category1: new Set(["item1"])
   });
 
-  const invalidOrder: Map<string, Set<string>> = Map({
-    categoryNone: Set(["item1"]),
-    category2: Set(["item1"])
+  const multiOrder = new Order({
+    category1: new Set(["item1"]),
+    category2: new Set(["item3", "item4"])
+  });
+
+  const invalidOrder = new Order({
+    categoryNone: new Set(["item1"]),
+    category2: new Set(["item1"])
   });
 
   it("should format price", () => {
