@@ -1,14 +1,15 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { HeaderComponent } from "./header.component";
-import {MatIconModule, MatToolbarModule} from "@angular/material";
+import { MatIconModule } from "@angular/material/icon";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 describe("HeaderComponent", () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HeaderComponent ],
       imports: [
@@ -29,14 +30,14 @@ describe("HeaderComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should link to specified URL", async(() => {
+  it("should link to specified URL", waitForAsync(() => {
     component.projectLink = "http://www.foo.com/";
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector("a.icon-link").href).toEqual("http://www.foo.com/");
   }));
 
-  it("should show expected title", async(() => {
+  it("should show expected title", waitForAsync(() => {
     component.title = "Hello World";
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;

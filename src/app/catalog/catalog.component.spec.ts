@@ -1,7 +1,9 @@
 /* tslint:disable:no-unused-variable no-duplicate-string */
 import {DebugElement} from "@angular/core";
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
 import {By} from "@angular/platform-browser";
 
 import {Catalog} from "../model/catalog";
@@ -37,7 +39,7 @@ describe("CatalogComponent Unit", () => {
   let component: CatalogComponent;
   let fixture: ComponentFixture<CatalogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CatalogComponent],
       imports: [
@@ -69,7 +71,7 @@ describe("CatalogComponent Unit", () => {
     verifySelectedCategory(fixture, "category 1");
   });
 
-  it("should set selected category", async(() => {
+  it("should set selected category", waitForAsync(() => {
     verifyCategoryItems(fixture, TestCatalogLoaderService.getTestCatalog());
     verifySelectedCategory(fixture, "category 1");
     const unSelectedCategoryButton = verifyAndGetUnselectedCategory(fixture, "category 2");

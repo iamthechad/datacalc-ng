@@ -19,7 +19,7 @@ import {Order} from "../model/order";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderComponent implements OnDestroy {
-  @ViewChild("orderTotalElement") orderTotalElement: ElementRef;
+  @ViewChild("orderTotalElement", { static: true }) orderTotalElement: ElementRef;
 
   orderTotal = new BehaviorSubject<number>(0);
 
