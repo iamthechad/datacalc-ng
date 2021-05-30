@@ -1,9 +1,11 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from "@angular/core/testing";
 
 import { OrderComponent } from "./order.component";
 import {DebugElement} from "@angular/core";
 import {Category} from "../model/category";
-import {MatCardModule, MatIconModule, MatListModule} from "@angular/material";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
 import {PricePipe} from "../pipe/price.pipe";
 import {By} from "@angular/platform-browser";
 import {Util} from "../common/util";
@@ -71,7 +73,7 @@ describe("OrderComponent", () => {
   let fixture: ComponentFixture<OrderComponent>;
   let orderService: OrderService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OrderComponent, PricePipe ],
       imports: [

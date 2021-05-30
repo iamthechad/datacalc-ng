@@ -1,8 +1,10 @@
 /* tslint:disable:no-duplicate-string */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { ItemsComponent } from "./items.component";
-import {MatButtonModule, MatCardModule, MatListModule} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
 import {PricePipe} from "../pipe/price.pipe";
 import {By} from "@angular/platform-browser";
 import {Item} from "../model/item";
@@ -85,7 +87,7 @@ describe("ItemsComponent", () => {
     }
   ];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ItemsComponent, TestItemsHostComponent, PricePipe ],
       imports: [

@@ -3,15 +3,17 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgModule} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatToolbarModule} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 import {AppComponent} from "./app.component";
 import {HeaderComponent} from "./header/header.component";
 import {CatalogComponent} from "./catalog/catalog.component";
 
 import {environment} from "../environments/environment";
-
-import "hammerjs";
 import {ItemsComponent} from "./items/items.component";
 import {OrderComponent} from "./order/order.component";
 import {PricePipe} from "./pipe/price.pipe";

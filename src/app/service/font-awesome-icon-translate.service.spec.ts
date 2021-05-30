@@ -1,4 +1,4 @@
-import {async, TestBed} from "@angular/core/testing";
+import { TestBed, waitForAsync } from "@angular/core/testing";
 
 import {IconTranslateService, IconTranslateServiceToken} from "./icon-translate.service";
 import {FontAwesomeIconTranslateService} from "./font-awesome-icon-translate.service";
@@ -6,7 +6,7 @@ import {FontAwesomeIconTranslateService} from "./font-awesome-icon-translate.ser
 describe("FontAwesomeIconTranslateService", () => {
   let translateService: IconTranslateService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [ { provide: IconTranslateServiceToken, useClass: FontAwesomeIconTranslateService } ]
     });

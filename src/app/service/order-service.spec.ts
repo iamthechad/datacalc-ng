@@ -1,4 +1,4 @@
-import {async, TestBed} from "@angular/core/testing";
+import { TestBed, waitForAsync } from "@angular/core/testing";
 
 import {OrderService} from "./order-service";
 import {Order} from "../model/order";
@@ -30,7 +30,7 @@ function verifyOrderAndObservable(expectedOrder: Order, orderService: OrderServi
 describe("OrderService", () => {
   let orderService: OrderService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [ OrderService ]
     });
