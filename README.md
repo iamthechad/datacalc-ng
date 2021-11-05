@@ -1,5 +1,6 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/c0976b170abb1192aa46/maintainability)](https://codeclimate.com/github/iamthechad/datacalc-ng/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/c0976b170abb1192aa46/test_coverage)](https://codeclimate.com/github/iamthechad/datacalc-ng/test_coverage)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=iamthechad_datacalc-ng&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=iamthechad_datacalc-ng)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=iamthechad_datacalc-ng&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=iamthechad_datacalc-ng)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=iamthechad_datacalc-ng&metric=coverage)](https://sonarcloud.io/summary/new_code?id=iamthechad_datacalc-ng)
 # DatacalcNg
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 7.3.7.
