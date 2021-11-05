@@ -17,7 +17,8 @@ import {CatalogLoaderToken} from "../model/catalog-loader";
 import {TestCatalogLoaderService} from "../test/service/test-catalog-loader.service";
 import {Order} from "../model/order";
 
-function verifyOrder(itemList: DebugElement[], order: Order, catalog: Catalog) {
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
+const verifyOrder = (itemList: DebugElement[], order: Order, catalog: Catalog) => {
   const expectedCategories = Util.getCategoriesForOrder(order, catalog);
   expect(itemList.length).toEqual(expectedCategories.length);
 
@@ -39,18 +40,18 @@ function verifyOrder(itemList: DebugElement[], order: Order, catalog: Catalog) {
       expect(item.nativeElement.textContent).toContain(categoryItem.name);
     });
   });
-}
+};
 
-function verifyTotal(total: DebugElement, expectedTotal: number) {
+const verifyTotal = (total: DebugElement, expectedTotal: number) => {
   expect(total.nativeElement.textContent).toEqual(Util.formatPrice(expectedTotal));
-}
+};
 
-function verifyOrderAndTotal(debugElement: DebugElement, expectedOrder: Order, catalog: Catalog) {
+const verifyOrderAndTotal = (debugElement: DebugElement, expectedOrder: Order, catalog: Catalog) => {
   verifyOrder(debugElement.queryAll(By.css(".order-category")), expectedOrder, catalog);
   verifyTotal(debugElement.query(By.css(".order-total")), Util.getOrderTotal(expectedOrder, catalog));
-}
+};
 
-function applyOrderAndVerify(expectedOrder: Order, fixture: ComponentFixture<OrderComponent>, orderService: OrderService) {
+const applyOrderAndVerify = (expectedOrder: Order, fixture: ComponentFixture<OrderComponent>, orderService: OrderService) => {
   fixture.detectChanges();
   expectedOrder.getCategoryIds().forEach(categoryId => {
     expectedOrder.getItemsForCategory(categoryId).forEach(itemId => orderService.addItem(itemId, categoryId));
@@ -58,15 +59,15 @@ function applyOrderAndVerify(expectedOrder: Order, fixture: ComponentFixture<Ord
   tick();
   fixture.detectChanges();
   verifyOrderAndTotal(fixture.debugElement, expectedOrder, TestCatalogLoaderService.getTestCatalog());
-}
+};
 
-function removeFirstOrderItem(fixture: ComponentFixture<OrderComponent>) {
+const removeFirstOrderItem = (fixture: ComponentFixture<OrderComponent>) => {
   const removeButton = fixture.debugElement.query(By.css(".item-remove"));
   expect(removeButton).toBeTruthy();
   removeButton.triggerEventHandler("click", 0);
   tick();
   fixture.detectChanges();
-}
+};
 
 describe("OrderComponent", () => {
   let component: OrderComponent;
@@ -87,7 +88,7 @@ describe("OrderComponent", () => {
         { provide: CatalogLoaderToken, useClass: TestCatalogLoaderService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

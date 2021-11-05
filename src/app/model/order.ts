@@ -46,9 +46,9 @@ export class Order {
   public static asJS(order: Order): string {
     return JSON.stringify(order.entries, (key, value) => {
       if (typeof value === "object" && value instanceof Set) {
-        return Array.from(value);
+        return Array.from(value as Set<string>);
       }
-      return value;
+      return value as string;
     });
   }
 
@@ -57,7 +57,7 @@ export class Order {
       if (Array.isArray(value)) {
         return new Set(value);
       }
-      return value;
+      return value as string;
     }));
   }
 }

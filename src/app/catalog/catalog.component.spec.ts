@@ -1,4 +1,3 @@
-/* tslint:disable:no-unused-variable no-duplicate-string */
 import {DebugElement} from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatCardModule } from "@angular/material/card";
@@ -14,26 +13,27 @@ import {CatalogService} from "../service/catalog-service";
 import {IconTranslateServiceToken} from "../service/icon-translate.service";
 import {FontAwesomeIconTranslateService} from "../service/font-awesome-icon-translate.service";
 
-function verifyCategoryItems(fixture: ComponentFixture<CatalogComponent>, catalog: Catalog) {
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+const verifyCategoryItems = (fixture: ComponentFixture<CatalogComponent>, catalog: Catalog) => {
   const categoryButtons = fixture.debugElement.queryAll(By.css(".catalog-entry"));
   expect(categoryButtons.length).toEqual(catalog.getCategories().length);
   categoryButtons.forEach((button: DebugElement, index) => {
     expect(button.nativeElement.textContent).toContain(`category ${index + 1}`);
   });
-}
+};
 
-function verifySelectedCategory(fixture: ComponentFixture<CatalogComponent>, expectedCategoryName: string) {
+const verifySelectedCategory = (fixture: ComponentFixture<CatalogComponent>, expectedCategoryName: string) => {
   const selectedCategoryButton = fixture.debugElement.query(By.css(".selected"));
   expect(selectedCategoryButton).not.toBeNull();
   expect(selectedCategoryButton.nativeElement.textContent).toContain(expectedCategoryName);
-}
+};
 
-function verifyAndGetUnselectedCategory(fixture: ComponentFixture<CatalogComponent>, expectedCategoryName: string) {
+const verifyAndGetUnselectedCategory = (fixture: ComponentFixture<CatalogComponent>, expectedCategoryName: string) => {
   const unSelectedCategoryButton = fixture.debugElement.query(By.css("button:not(.selected)"));
   expect(unSelectedCategoryButton).toBeTruthy();
   expect(unSelectedCategoryButton.nativeElement.textContent).toContain(expectedCategoryName);
   return unSelectedCategoryButton;
-}
+};
 
 describe("CatalogComponent Unit", () => {
   let component: CatalogComponent;

@@ -4,6 +4,7 @@ import {CatalogService} from "./service/catalog-service";
 import {OrderService} from "./service/order-service";
 import {Util} from "./common/util";
 import {Catalog} from "./model/catalog";
+import { Item } from "./model/item";
 
 @Component({
   selector: "mt-app-root",
@@ -42,7 +43,7 @@ export class AppComponent {
     this.orderService.addItem(itemId, this.selectedCategory);
   }
 
-  getItemsForCurrentCategory = () => Util.getItemsForCategory(this.catalog, this.selectedCategory);
+  getItemsForCurrentCategory = (): Item[] => Util.getItemsForCategory(this.catalog, this.selectedCategory);
 
-  getOrderItemsForCurrentCategory = () => this.orderService.getItemsForCategory(this.selectedCategory);
+  getOrderItemsForCurrentCategory = (): Set<string> => this.orderService.getItemsForCategory(this.selectedCategory);
 }

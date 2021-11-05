@@ -42,7 +42,7 @@ export class CatalogComponent implements OnDestroy {
     this.onDestroy.complete();
   }
 
-  onCategorySelected(categoryId) {
+  onCategorySelected(categoryId: string): void {
     this.selectedCategory = categoryId;
     this.categorySelected.emit(categoryId);
   }

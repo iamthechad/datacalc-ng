@@ -3,29 +3,29 @@ import { TestBed, waitForAsync } from "@angular/core/testing";
 import {OrderService} from "./order-service";
 import {Order} from "../model/order";
 
-function verifyOrderObject(expectedOrder: Order, actualOrder: Order) {
+const verifyOrderObject = (expectedOrder: Order, actualOrder: Order) => {
   expect(expectedOrder).toBeTruthy();
   expect(actualOrder).toBeTruthy();
   expect(expectedOrder).toEqual(actualOrder);
-}
+};
 
-function verifyOrderWithService(expectedOrder: Order, orderService: OrderService) {
+const verifyOrderWithService = (expectedOrder: Order, orderService: OrderService) => {
   expect(expectedOrder).toBeTruthy();
   expectedOrder.getCategoryIds().forEach(categoryId => {
     const expectedItems = expectedOrder.getItemsForCategory(categoryId);
     const actualItems = orderService.getItemsForCategory(categoryId);
     expect(expectedItems).toEqual(actualItems);
   });
-}
+};
 
-function verifyOrderAndObservable(expectedOrder: Order, orderService: OrderService, done: DoneFn) {
+const verifyOrderAndObservable = (expectedOrder: Order, orderService: OrderService, done: DoneFn) => {
   verifyOrderObject(expectedOrder, orderService.getCurrentOrder());
   verifyOrderWithService(expectedOrder, orderService);
   orderService.getOrderObservable().subscribe(order => {
     verifyOrderObject(expectedOrder, order);
     done();
   });
-}
+};
 
 describe("OrderService", () => {
   let orderService: OrderService;
@@ -37,7 +37,7 @@ describe("OrderService", () => {
   }));
 
   beforeEach(() => {
-    orderService = TestBed.get(OrderService);
+    orderService = TestBed.inject(OrderService);
     orderService.clearOrder();
   });
 
@@ -74,7 +74,6 @@ describe("OrderService", () => {
     verifyOrderAndObservable(expectedOrder, orderService, done);
   });
 
-  /* tslint:disable-next-line:no-identical-functions */
   it("should not fail for invalid item id", (done) => {
     const expectedOrder = new Order({
       category1: new Set(["itemXX"])

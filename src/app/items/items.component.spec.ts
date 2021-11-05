@@ -1,4 +1,3 @@
-/* tslint:disable:no-duplicate-string */
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { ItemsComponent } from "./items.component";
@@ -11,6 +10,7 @@ import {Item} from "../model/item";
 import {Component, DebugElement} from "@angular/core";
 import {Util} from "../common/util";
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
 @Component({
   template: `
     <mt-items [items]=items [orderItems]=orderItems (itemSelected)="itemSelected($event)"></mt-items>
@@ -23,14 +23,14 @@ class TestItemsHostComponent {
   itemSelected(itemId: string) { this.selectedItem = itemId; }
 }
 
-function verifyCard(card: DebugElement, expectedItem: Item, cardShouldBeSelected = false) {
+const verifyCard = (card: DebugElement, expectedItem: Item, cardShouldBeSelected = false) => {
   const cardId = card.nativeElement.attributes.id.textContent;
   expect(cardId).toEqual(expectedItem.id);
   const cardName = card.query(By.css(".item-title"));
   expect(cardName.nativeElement.textContent).toEqual(expectedItem.name);
   const cardPrice = card.query(By.css(".item-price"));
   expect(cardPrice.nativeElement.textContent).toEqual(Util.formatPrice(expectedItem.value));
-  if (expectedItem.hasOwnProperty("description")) {
+  if (expectedItem.description) {
     const cardDescription = card.query(By.css(".item-description"));
     expect(cardDescription).toBeTruthy();
     const descriptionText = cardDescription.nativeElement.textContent;
@@ -38,14 +38,14 @@ function verifyCard(card: DebugElement, expectedItem: Item, cardShouldBeSelected
       expect(descriptionText).toContain(line);
     });
   }
-  if (expectedItem.hasOwnProperty("note")) {
+  if (expectedItem.note) {
     const cardNote = card.query(By.css(".item-note"));
     expect(cardNote).toBeTruthy();
     expect(cardNote.nativeElement.textContent).toEqual(expectedItem.note);
   }
   const cardCommercialSource = card.query(By.css(".item-commercial"));
   expect(cardCommercialSource.nativeElement.textContent).toEqual(expectedItem.commercialSource);
-  if (expectedItem.hasOwnProperty("probableSource")) {
+  if (expectedItem.probableSource) {
     const cardProbableSource = card.query(By.css(".item-probable"));
     expect(cardProbableSource.nativeElement.textContent).toEqual(expectedItem.probableSource);
   }
@@ -55,7 +55,7 @@ function verifyCard(card: DebugElement, expectedItem: Item, cardShouldBeSelected
   } else {
     expect(cardSelectControl).toBeTruthy();
   }
-}
+};
 
 describe("ItemsComponent", () => {
   let component: TestItemsHostComponent;
@@ -96,7 +96,7 @@ describe("ItemsComponent", () => {
         MatListModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
