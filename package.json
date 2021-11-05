@@ -5,11 +5,12 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
+    "dev:test": "ng test --code-coverage=true",
     "start": "ng serve",
     "start-open": "ng serve --host=0.0.0.0 --disable-host-check",
     "build": "ng build --aot=true",
     "build:prod": "ng build --aot=true --prod=true",
-    "test": "ng test",
+    "test": "ng test --browsers ChromeHeadless --code-coverage=true --watch=false",
     "lint": "ng lint datacalc-ng --format verbose",
     "e2e": "ng e2e"
   },
