@@ -13,7 +13,7 @@ describe("FontAwesomeIconTranslateService", () => {
   }));
 
   beforeEach(() => {
-    translateService = TestBed.get(IconTranslateServiceToken);
+    translateService = TestBed.inject(IconTranslateServiceToken);
   });
 
   it("should be created", () => {

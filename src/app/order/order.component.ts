@@ -44,7 +44,7 @@ export class OrderComponent implements OnDestroy {
     this.onDestroy.complete();
   }
 
-  removeItemFromOrder(categoryId: string, itemId: string) {
+  removeItemFromOrder(categoryId: string, itemId: string): void {
     this.orderService.removeItem(itemId, categoryId);
   }
 

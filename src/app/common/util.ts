@@ -38,9 +38,7 @@ export class Util {
 
   static getOrderTotal(order: Order, catalog: Catalog): number {
     return _.reduce(Util.getCategoriesForOrder(order, catalog), (prevTotal: number, category) => {
-      const categoryTotal = _.reduce(Util.getOrderCategoryItems(order, catalog, category.id), (itemPrevTotal: number, item: Item) => {
-        return itemPrevTotal + item.value;
-      }, 0);
+      const categoryTotal = _.reduce(Util.getOrderCategoryItems(order, catalog, category.id), (itemPrevTotal: number, item: Item) => itemPrevTotal + item.value, 0);
       return prevTotal + categoryTotal;
     }, 0);
   }

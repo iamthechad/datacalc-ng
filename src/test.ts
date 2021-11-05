@@ -12,12 +12,12 @@ import {
   platformBrowserDynamicTesting
 } from "@angular/platform-browser-dynamic/testing";
 
+/* eslint-disable */
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare var __karma__: any;
 declare var require: any;
 
 // Prevent Karma from running prematurely.
-/* tslint:disable-next-line */
 __karma__.loaded = function() {};
 
 // First, initialize the Angular testing environment.

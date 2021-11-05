@@ -7,7 +7,7 @@ import {Category} from "../model/category";
 import * as _ from "lodash";
 import {Item} from "../model/item";
 import {flatMap} from "rxjs/operators";
-
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
 @Injectable()
 export class FirebaseCatalogLoaderService implements CatalogLoader {
 
