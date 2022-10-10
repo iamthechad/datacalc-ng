@@ -1,12 +1,13 @@
 .catalog-container {
   height: calc(100% - 48px);
+
+  .catalog-entry {
+    width: 100%;
+    text-align: left;
+  }
+
+  .selected {
+    background: #cccccc;
+  }
 }
 
-.catalog-entry {
-  width: 100%;
-  text-align: left;
-}
-
-.selected {
-  background: #cccccc;
-}

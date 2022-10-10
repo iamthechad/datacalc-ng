@@ -8,7 +8,7 @@
           <span matLine *ngIf="item.description" class="item-description text-wrap">{{ item.description.join(', ') }}</span>
           <span matLine *ngIf="item.note" class="item-note text-wrap">{{ item.note }}</span>
         </mat-list-item>
-        <mat-divider *ngIf="item.description || item.note"></mat-divider>
+        <!--<mat-divider *ngIf="item.description || item.note"></mat-divider>-->
         <mat-list-item>
           <span matLine>Commercial Source</span>
           <span matLine class="item-commercial"><a
@@ -21,7 +21,7 @@
       </mat-list>
     </mat-card-content>
     <mat-card-actions *ngIf="!isItemSelected(item)">
-      <button mat-button (click)="onItemSelected(item.id)" class="item-select">Select</button>
+      <button mat-button (click)="onItemSelected(item.id)" class="item-select">SELECT</button>
     </mat-card-actions>
   </mat-card>
 </div>

@@ -6,8 +6,7 @@
               [orderItems]="getOrderItemsForCurrentCategory()" (itemSelected)="itemSelected($event)"></mt-items>
     <mt-order class="column-element"></mt-order>
   </div>
+  <div *ngIf=!catalogLoaded>
+    Loading...
+  </div>
 </div>
-<div *ngIf=!catalogLoaded>
-  Loading...
-</div>
-
