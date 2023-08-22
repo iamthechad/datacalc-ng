@@ -30,7 +30,7 @@
     "@angular/fire": "^6.1.5",
     "@fortawesome/fontawesome-free": "^5.2.0",
     "core-js": "^2.5.0",
-    "firebase": "^8.6.3",
+    "firebase": "^10.2.0",
     "lodash": "^4.17.4",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0",
